@@ -124,7 +124,7 @@ Scrapes nonprofit directories, enriches them with IRS 990 data and has Gemini sc
 **[HealthyHabits API](https://github.com/keylorpineda/HealthyHabits-API)**  
 GraphQL API for routines, habits and progress tracking, with JWT auth and role based permissions.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/openjdk-dark.svg"><img src="assets/chips/openjdk-light.svg" alt="Java" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/java-dark.svg"><img src="assets/chips/java-light.svg" alt="Java" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/springboot-dark.svg"><img src="assets/chips/springboot-light.svg" alt="Spring Boot" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/graphql-dark.svg"><img src="assets/chips/graphql-light.svg" alt="GraphQL" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/mariadb-dark.svg"><img src="assets/chips/mariadb-light.svg" alt="MariaDB" height="36"></picture>
@@ -139,7 +139,7 @@ GraphQL API for routines, habits and progress tracking, with JWT auth and role b
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/typescript-dark.svg"><img src="assets/chips/typescript-light.svg" alt="TypeScript" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/javascript-dark.svg"><img src="assets/chips/javascript-light.svg" alt="JavaScript" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/python-dark.svg"><img src="assets/chips/python-light.svg" alt="Python" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/openjdk-dark.svg"><img src="assets/chips/openjdk-light.svg" alt="Java" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/java-dark.svg"><img src="assets/chips/java-light.svg" alt="Java" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/gnubash-dark.svg"><img src="assets/chips/gnubash-light.svg" alt="Bash" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/sql-dark.svg"><img src="assets/chips/sql-light.svg" alt="SQL" height="36"></picture>
 

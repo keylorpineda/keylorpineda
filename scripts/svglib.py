@@ -149,6 +149,7 @@ CUSTOM = {
     "reactnative": ("React Native", "#61DAFB"),
     "tflite": ("TensorFlow Lite", "#FF6F00"),
     "sql": ("SQL", "#336791"),
+    "java": ("Java", "#5382A1"),
     "sqlalchemyx": ("SQLAlchemy", "#B5361F"),
     "kagglex": ("Kaggle", "#20BEFF"),
 }
@@ -182,6 +183,14 @@ def icon(slug, x, y, size, th):
             '<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>'
             '<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>'
             '<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></g>'
+        )
+    if slug == "java":
+        return (
+            f'{g}<g fill="none" stroke-linecap="round" stroke-linejoin="round">'
+            '<path d="M10.2 2.6c-1.6 1.4 1.4 2.4-.1 4.4M13.8 1.6c-1.8 1.6 1.6 2.8-.1 5.2" stroke="#E76F00" stroke-width="1.7"/>'
+            '<path d="M5.2 10.2h11.6v3.6a5.4 5.4 0 0 1-5.4 5.4h-.8a5.4 5.4 0 0 1-5.4-5.4z" stroke="#5382A1" stroke-width="1.9"/>'
+            '<path d="M16.8 11.6h1.3a2.3 2.3 0 0 1 0 4.6h-1.8" stroke="#5382A1" stroke-width="1.8"/>'
+            '<path d="M3.5 22h15.2" stroke="#5382A1" stroke-width="1.8"/></g></g>'
         )
     if slug == "oracle":
         return f'{g}<rect x="1.8" y="6.2" width="20.4" height="11.6" rx="5.8" fill="none" stroke="#C74634" stroke-width="2.8"/></g>'

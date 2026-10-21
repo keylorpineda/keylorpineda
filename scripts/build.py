@@ -148,7 +148,7 @@ def chip_svg(slug, theme, label=None):
     return svg_doc(W, H, body, label)
 
 
-LABELS = {"openjdk": "Java", "gnubash": "Bash", "nodedotjs": "Node.js", "reactquery": "TanStack Query",
+LABELS = {"java": "Java", "gnubash": "Bash", "nodedotjs": "Node.js", "reactquery": "TanStack Query",
           "oracle": "Oracle Cloud", "aws": "AWS", "groq": "Groq", "meta": "Llama 3.3", "cohere": "Cohere"}
 USED_CHIPS = set()
 
@@ -338,7 +338,7 @@ def cert(c, theme):
 
 # --------------------------------------------------------------------------- toolbox
 TOOLBOX = [
-    ("Languages", ["typescript", "javascript", "python", "openjdk", "gnubash", "sql"]),
+    ("Languages", ["typescript", "javascript", "python", "java", "gnubash", "sql"]),
     ("Frontend & mobile", ["react", "reactnative", "expo", "vite", "tailwindcss", "reactquery", "zod"]),
     ("Backend", ["nestjs", "nodedotjs", "fastapi", "springboot", "graphql", "prisma", "typeorm", "sqlalchemy", "pydantic"]),
     ("Data & AI", ["tensorflow", "keras", "tflite", "numpy", "pandas", "scikitlearn", "googlegemini", "kaggle"]),
@@ -404,7 +404,7 @@ def readme():
     md.append(f"**[HealthyHabits API](https://github.com/{USER}/HealthyHabits-API)**  ")
     md.append("GraphQL API for routines, habits and progress tracking, with JWT auth and role based permissions.")
     md.append("")
-    md.append(chips_md(["openjdk", "springboot", "graphql", "mariadb", "docker"]))
+    md.append(chips_md(["java", "springboot", "graphql", "mariadb", "docker"]))
     md.append("")
     md.append("</details>")
     md.append("")
