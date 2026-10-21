@@ -232,6 +232,39 @@ def banner(p, theme):
     write(f"project-{p['name']}", theme, svg_doc(W, H, "".join(b), f"{p['title']}: {p['tagline']}", style + REDUCED))
 
 
+# --------------------------------------------------------------------------- contact card
+def g_pin(th, x, y):
+    return (f'<g transform="translate({x} {y})" fill="none" stroke="{th["accent"]}" stroke-width="2" stroke-linejoin="round">'
+            '<path d="M11 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C18 14.8 11 21 11 21z"/><circle cx="11" cy="9.5" r="2.5"/></g>')
+
+
+def contact(theme):
+    th = THEMES[theme]
+    W, H = 1000, 360
+    b = [frame(W, H, th, 26)]
+    b.append(text("CONTACT", 15, 48, 78, th["accent"], "semibold", tracking=2.6))
+    b.append(text("Let's talk", 52, 46, 140, th["text"], "display", tracking=-1.4))
+    p, _ = paragraph("Have a project in mind, a question about something I built, or want to talk about cloud, "
+                     "data or security? Write me, I'd like to hear about it.", 21, 48, 190, 400, th["muted"], leading=1.55)
+    b.append(p)
+    rows = [
+        (g_mail, "EMAIL", EMAIL),
+        (g_linkedin, "LINKEDIN", "in/keylor-pineda"),
+        (g_pin, "BASED IN", "Costa Rica  ·  UTC−6"),
+    ]
+    x0, y0 = 500, 40
+    rh = (H - 80) / 3
+    for i, (glyph, lab, val) in enumerate(rows):
+        y = y0 + i * rh
+        b.append(f'<rect x="{x0}" y="{fmt(y + 8)}" width="{W - 40 - x0}" height="{fmt(rh - 16)}" rx="18" fill="{th["card2"]}" stroke="{th["border"]}"/>')
+        cy = y + rh / 2
+        b.append(f'<rect x="{x0 + 18}" y="{fmt(cy - 24)}" width="48" height="48" rx="14" fill="{th["card"]}" stroke="{th["border"]}"/>')
+        b.append(glyph(th, x0 + 31, cy - 11))
+        b.append(text(lab, 13, x0 + 84, cy - 6, th["faint"], "semibold", tracking=2))
+        b.append(text(val, 19, x0 + 84, cy + 20, th["text"], "medium"))
+    write("contact", theme, svg_doc(W, H, "".join(b), f"Let's talk. Email {EMAIL}, LinkedIn in/keylor-pineda, based in Costa Rica"))
+
+
 # --------------------------------------------------------------------------- about card
 FACTS = [
     ("Based in", "Costa Rica"),
@@ -436,7 +469,14 @@ def readme():
         md.append("")
     md.append("## Contact")
     md.append("")
-    md.append(f"Email me at [{EMAIL}](mailto:{EMAIL}) or find me on [LinkedIn]({LINKEDIN}).")
+    md.append(f'<a href="mailto:{EMAIL}">{pic("contact", "Get in touch: email, LinkedIn, based in Costa Rica", width="100%")}</a>')
+    md.append("")
+    md.append('<p align="center">')
+    md.append(f'  <a href="mailto:{EMAIL}">{pic("btn-write", "Write me an email", height=46)}</a>')
+    md.append(f'  <a href="{LINKEDIN}">{pic("btn-linkedin", "LinkedIn", height=46)}</a>')
+    md.append("</p>")
+    md.append("")
+    md.append('<p align="center"><sub>Thanks for stopping by.</sub></p>')
     md.append("")
     (ROOT / "README.md").write_text("\n".join(md))
 
@@ -458,6 +498,8 @@ def main():
         button("email", theme, EMAIL, g_mail)
         button("linkedin", theme, "LinkedIn", g_linkedin)
         button("repos", theme, "All repositories", g_github)
+        contact(theme)
+        button("write", theme, "Write me an email", g_mail, primary=True)
         button("demo", theme, "Live demo", g_arrow, primary=True)
         button("source", theme, "Source code", g_github)
         for s in USED_CHIPS:

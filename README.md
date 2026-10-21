@@ -240,4 +240,11 @@ Pulled from the GitHub API and refreshed every day.
 
 ## Contact
 
-Email me at [keylorpineda729@gmail.com](mailto:keylorpineda729@gmail.com) or find me on [LinkedIn](https://www.linkedin.com/in/keylor-pineda).
+<a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-dark.svg"><img src="assets/contact-light.svg" alt="Get in touch: email, LinkedIn, based in Costa Rica" width="100%"></picture></a>
+
+<p align="center">
+  <a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-write-dark.svg"><img src="assets/btn-write-light.svg" alt="Write me an email" height="46"></picture></a>
+  <a href="https://www.linkedin.com/in/keylor-pineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" alt="LinkedIn" height="46"></picture></a>
+</p>
+
+<p align="center"><sub>Thanks for stopping by.</sub></p>
