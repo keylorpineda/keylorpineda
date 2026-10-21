@@ -238,31 +238,37 @@ def g_pin(th, x, y):
             '<path d="M11 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C18 14.8 11 21 11 21z"/><circle cx="11" cy="9.5" r="2.5"/></g>')
 
 
+CHANNELS = [
+    ("email", g_mail, "EMAIL", EMAIL, f"mailto:{EMAIL}"),
+    ("linkedin", g_linkedin, "LINKEDIN", "in/keylor-pineda", LINKEDIN),
+    ("github", g_github, "GITHUB", f"@{USER}", f"https://github.com/{USER}"),
+]
+
+
 def contact(theme):
     th = THEMES[theme]
-    W, H = 1000, 360
+    W, H = 1000, 300
     b = [frame(W, H, th, 26)]
     b.append(text("CONTACT", 15, 48, 78, th["accent"], "semibold", tracking=2.6))
     b.append(text("Let's talk", 52, 46, 140, th["text"], "display", tracking=-1.4))
     p, _ = paragraph("Have a project in mind, a question about something I built, or want to talk about cloud, "
-                     "data or security? Write me, I'd like to hear about it.", 21, 48, 190, 400, th["muted"], leading=1.55)
+                     "data or security? Write me, I'd like to hear about it.", 21, 48, 190, 560, th["muted"], leading=1.55)
     b.append(p)
-    rows = [
-        (g_mail, "EMAIL", EMAIL),
-        (g_linkedin, "LINKEDIN", "in/keylor-pineda"),
-        (g_pin, "BASED IN", "Costa Rica  ·  UTC−6"),
-    ]
-    x0, y0 = 500, 40
-    rh = (H - 80) / 3
-    for i, (glyph, lab, val) in enumerate(rows):
-        y = y0 + i * rh
-        b.append(f'<rect x="{x0}" y="{fmt(y + 8)}" width="{W - 40 - x0}" height="{fmt(rh - 16)}" rx="18" fill="{th["card2"]}" stroke="{th["border"]}"/>')
-        cy = y + rh / 2
-        b.append(f'<rect x="{x0 + 18}" y="{fmt(cy - 24)}" width="48" height="48" rx="14" fill="{th["card"]}" stroke="{th["border"]}"/>')
-        b.append(glyph(th, x0 + 31, cy - 11))
-        b.append(text(lab, 13, x0 + 84, cy - 6, th["faint"], "semibold", tracking=2))
-        b.append(text(val, 19, x0 + 84, cy + 20, th["text"], "medium"))
-    write("contact", theme, svg_doc(W, H, "".join(b), f"Let's talk. Email {EMAIL}, LinkedIn in/keylor-pineda, based in Costa Rica"))
+    pill = "Costa Rica  ·  UTC−6"
+    pw = tw(pill, 16, "medium") + 66
+    b.append(f'<rect x="{fmt(W - 48 - pw)}" y="56" width="{fmt(pw)}" height="44" rx="22" fill="{th["card2"]}" stroke="{th["border"]}"/>')
+    b.append(g_pin(th, W - 48 - pw + 18, 67))
+    b.append(text(pill, 16, W - 48 - pw + 48, 83.5, th["text"], "medium"))
+    write("contact", theme, svg_doc(W, H, "".join(b), "Let's talk. Based in Costa Rica, UTC-6"))
+    for name, glyph, lab, val, _ in CHANNELS:
+        tw_, th_ = 268, 112
+        t = [f'<rect x="4" y="4" width="{tw_ - 8}" height="{th_ - 8}" rx="20" fill="{th["card"]}" stroke="{th["border"]}"/>']
+        t.append(f'<rect x="22" y="22" width="40" height="40" rx="12" fill="{th["card2"]}" stroke="{th["border"]}"/>')
+        t.append(glyph(th, 31, 31))
+        t.append(text(lab, 12.5, 76, 47, th["faint"], "semibold", tracking=2))
+        t.append(g_arrow(dict(th, accent=th["muted"]), tw_ - 46, 26))
+        t.append(text(val, 15.5, 24, 89, th["text"], "medium"))
+        write(f"contact-{name}", theme, svg_doc(tw_, th_, "".join(t), f"{lab.title()}: {val}"))
 
 
 # --------------------------------------------------------------------------- about card
@@ -469,11 +475,11 @@ def readme():
         md.append("")
     md.append("## Contact")
     md.append("")
-    md.append(f'<a href="mailto:{EMAIL}">{pic("contact", "Get in touch: email, LinkedIn, based in Costa Rica", width="100%")}</a>')
+    md.append(f'<a href="mailto:{EMAIL}">{pic("contact", "Let\'s talk. Based in Costa Rica", width="100%")}</a>')
     md.append("")
     md.append('<p align="center">')
-    md.append(f'  <a href="mailto:{EMAIL}">{pic("btn-write", "Write me an email", height=46)}</a>')
-    md.append(f'  <a href="{LINKEDIN}">{pic("btn-linkedin", "LinkedIn", height=46)}</a>')
+    for name, _, lab, val, url in CHANNELS:
+        md.append(f'  <a href="{url}">{pic("contact-" + name, f"{lab.title()}: {val}", width=268)}</a>')
     md.append("</p>")
     md.append("")
     md.append('<p align="center"><sub>Thanks for stopping by.</sub></p>')
@@ -499,7 +505,6 @@ def main():
         button("linkedin", theme, "LinkedIn", g_linkedin)
         button("repos", theme, "All repositories", g_github)
         contact(theme)
-        button("write", theme, "Write me an email", g_mail, primary=True)
         button("demo", theme, "Live demo", g_arrow, primary=True)
         button("source", theme, "Source code", g_github)
         for s in USED_CHIPS:

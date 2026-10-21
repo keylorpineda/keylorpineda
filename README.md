@@ -240,11 +240,12 @@ Pulled from the GitHub API and refreshed every day.
 
 ## Contact
 
-<a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-dark.svg"><img src="assets/contact-light.svg" alt="Get in touch: email, LinkedIn, based in Costa Rica" width="100%"></picture></a>
+<a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-dark.svg"><img src="assets/contact-light.svg" alt="Let's talk. Based in Costa Rica" width="100%"></picture></a>
 
 <p align="center">
-  <a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-write-dark.svg"><img src="assets/btn-write-light.svg" alt="Write me an email" height="46"></picture></a>
-  <a href="https://www.linkedin.com/in/keylor-pineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" alt="LinkedIn" height="46"></picture></a>
+  <a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-email-dark.svg"><img src="assets/contact-email-light.svg" alt="Email: keylorpineda729@gmail.com" width="268"></picture></a>
+  <a href="https://www.linkedin.com/in/keylor-pineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-linkedin-dark.svg"><img src="assets/contact-linkedin-light.svg" alt="Linkedin: in/keylor-pineda" width="268"></picture></a>
+  <a href="https://github.com/keylorpineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-github-dark.svg"><img src="assets/contact-github-light.svg" alt="Github: @keylorpineda" width="268"></picture></a>
 </p>
 
 <p align="center"><sub>Thanks for stopping by.</sub></p>
