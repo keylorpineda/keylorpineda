@@ -179,10 +179,48 @@ def card(W, H, th):
     return f'<rect x=".5" y=".5" width="{W-1}" height="{H-1}" rx="24" fill="{th["card"]}" stroke="{th["border"]}"/>'
 
 
+REDUCED = "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
+GROW = (
+    ".bar{transform-box:fill-box;transform-origin:left center;animation:grow 1.4s cubic-bezier(.2,.8,.2,1) backwards}"
+    "@keyframes grow{from{transform:scaleX(0)}}"
+    ".fade{animation:fade .8s ease-out backwards}@keyframes fade{from{opacity:0;transform:translateY(6px)}}"
+)
 STYLE = (
-    ".w{animation:wave 12s ease-in-out infinite}"
-    "@keyframes wave{0%,100%{opacity:0}5%{opacity:.9}12%{opacity:0}}"
-    "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
+    ".rv{transform-box:fill-box;transform-origin:center;animation:rv .55s cubic-bezier(.2,.8,.3,1.3) backwards}"
+    "@keyframes rv{from{opacity:0;transform:scale(.2)}}"
+    ".w{animation:wave 10s ease-in-out infinite backwards}"
+    "@keyframes wave{0%,100%{opacity:0}4%{opacity:.4}10%{opacity:0}}"
+    ".ring{transform-box:fill-box;transform-origin:center;animation:ring 2.2s ease-out infinite}"
+    "@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.3);opacity:0}}"
+    + REDUCED
+)
+
+
+def odometer(num, size, x, y, fill, delay=0.0):
+    """Digits roll up from 0 to their value. Static viewers see the final number."""
+    from svglib import F
+
+    out, cx = [], x
+    lh = size * 1.15
+    for i, ch in enumerate(num):
+        w = F["display"].width(ch, size) - 1.2 * (1 if i < len(num) - 1 else 0)
+        if not ch.isdigit():
+            out.append(text(ch, size, cx, y, fill, "display"))
+            cx += w
+            continue
+        dgt = int(ch)
+        cid = f"od{abs(hash((num, i, x, y))) % 10**8}"
+        out.append(f'<clipPath id="{cid}"><rect x="{fmt(cx - 2)}" y="{fmt(y - size * 0.9)}" width="{fmt(w + 4)}" height="{fmt(size * 1.12)}"/></clipPath>')
+        col = "".join(text(str(k), size, cx + (w - F["display"].width(str(k), size)) / 2, y + k * lh, fill, "display") for k in range(10))
+        d = delay + (len(num) - i) * 0.12
+        out.append(f'<g clip-path="url(#{cid})"><g class="od" style="--t:translateY({fmt(-dgt * lh)}px);animation-delay:{d:.2f}s" transform="translate(0 {fmt(-dgt * lh)})">{col}</g></g>')
+        cx += w
+    return "".join(out), cx - x
+
+
+ODO = (
+    ".od{animation:roll 1.8s cubic-bezier(.15,.85,.25,1) backwards}"
+    "@keyframes roll{from{transform:translateY(0)}to{transform:var(--t)}}"
 )
 
 
@@ -211,12 +249,16 @@ def render(s, theme):
         y = (i // 2) * (th_ + gap)
         b.append(f'<rect x="{fmt(x+.5)}" y="{fmt(y+.5)}" width="{fmt(tw_-1)}" height="{th_-1}" rx="22" fill="{th["card"]}" stroke="{th["border"]}"/>')
         b.append(text(lab.upper(), 14, x + 34, y + 44, th["accent"] if i == 2 else th["muted"], "semibold", tracking=2.2))
-        b.append(text(num, 54, x + 31, y + 104, th["text"], "display", tracking=-1.2))
+        od, odw = odometer(num, 54, x + 31, y + 104, th["text"], delay=0.15 * i)
+        b.append(od)
         if unit:
-            b.append(text(unit, 21, x + 31 + tw(num, 54, "display", -1.2) + 10, y + 104, th["muted"], "medium"))
+            b.append(text(unit, 21, x + 31 + odw + 10, y + 104, th["muted"], "medium", extra=f'class="fade" style="animation-delay:{1.2 + .15*i:.2f}s"'))
+        if i == 2 and cur:
+            b.append(f'<g transform="translate({fmt(x + tw_ - 64)} {y + 30})"><circle class="ring" cx="12" cy="12" r="6" fill="{th["accent"]}" opacity=".5"/>'
+                     f'<circle cx="12" cy="12" r="6" fill="{th["accent"]}"/></g>')
         b.append(text(sub, 16, x + 34, y + 130, th["faint"], "medium"))
     H = 2 * th_ + gap
-    files["activity-stats"] = svg_doc(W, H, "".join(b), f"{cal['totalContributions']} contributions in the last year, {all_time} all time, current streak {cur} days, longest streak {longest} days")
+    files["activity-stats"] = svg_doc(W, H, "".join(b), f"{cal['totalContributions']} contributions in the last year, {all_time} all time, current streak {cur} days, longest streak {longest} days", ODO + GROW + STYLE)
 
     # ---- calendar
     cell, step = 14, 17
@@ -239,13 +281,21 @@ def render(s, theme):
                 busiest = (d["date"], d["contributionCount"])
             x, y = hx + wi * step, gy + wd * step
             c, o = levels.get(d["contributionLevel"], levels["NONE"])
-            b.append(f'<rect x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="3.5" fill="{c}" opacity="{o}"/>')
+            rd = wi * 0.022 + wd * 0.015
             if d["contributionCount"]:
-                b.append(f'<rect class="w" style="animation-delay:{(wi*0.045 + wd*0.03):.2f}s" x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="3.5" fill="{th["accent"]}" opacity="0"/>')
+                b.append(f'<rect x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="3.5" fill="{th["cell"]}"/>')
+            b.append(f'<rect class="rv" style="animation-delay:{rd:.2f}s" x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="3.5" fill="{c}" opacity="{o}"/>')
+            if d["contributionCount"]:
+                b.append(f'<rect class="w" style="animation-delay:{2 + wi*0.045 + wd*0.03:.2f}s" x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="3.5" fill="{th["text"]}" opacity="0"/>')
+            if d["date"] == s["today"].isoformat():
+                today_xy = (x, y)
             if date.day <= 7 and wd == 0 and date.month != last_month:
                 last_month = date.month
                 if wi < len(weeks) - 2:
                     b.append(text(date.strftime("%b"), 14, x, gy - 14, th["muted"], "medium"))
+    if "today_xy" in locals():
+        tx, ty = today_xy
+        b.append(f'<rect class="ring" x="{fmt(tx)}" y="{fmt(ty)}" width="{cell}" height="{cell}" rx="3.5" fill="none" stroke="{th["accent"]}" stroke-width="2"/>')
     for wd, name in ((1, "Mon"), (3, "Wed"), (5, "Fri")):
         b.append(text(name, 13, hx - 10, gy + wd * step + 11.5, th["faint"], "medium", "end"))
     ly = gy + 7 * step + 34
@@ -281,10 +331,10 @@ def render(s, theme):
         b.append(text(lab, 20, 36, yy, th["text"], "medium"))
         bx, bwid = 260, W - 260 - 140
         b.append(f'<rect x="{bx}" y="{yy-12}" width="{fmt(bwid)}" height="10" rx="5" fill="{th["cell"]}"/>')
-        b.append(f'<rect x="{bx}" y="{yy-12}" width="{fmt(max(bwid * v / mx, 10 if v else 0))}" height="10" rx="5" fill="{th["accent"]}"/>')
+        b.append(f'<rect class="bar" style="animation-delay:{.2 + i*.12:.2f}s" x="{bx}" y="{yy-12}" width="{fmt(max(bwid * v / mx, 10 if v else 0))}" height="10" rx="5" fill="{th["accent"]}"/>')
         b.append(text(f"{v:,}", 20, W - 36, yy, th["text"], "semibold", "end"))
     H = 104 + len(rows) * 48 - 12
-    files["activity-breakdown"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Contribution breakdown: " + ", ".join(f"{k} {v}" for k, v in rows))
+    files["activity-breakdown"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Contribution breakdown: " + ", ".join(f"{k} {v}" for k, v in rows), GROW + REDUCED)
 
     # ---- languages
     total = sum(s["langs"].values()) or 1
@@ -296,7 +346,7 @@ def render(s, theme):
     cx = bx
     for name, size in top:
         w = bwid * size / total
-        b.append(f'<rect x="{fmt(cx)}" y="76" width="{fmt(w)}" height="14" fill="{s["colors"][name]}"/>')
+        b.append(f'<rect class="bar" style="animation-delay:{.15 + top.index((name, size))*.18:.2f}s" x="{fmt(cx)}" y="76" width="{fmt(w)}" height="14" fill="{s["colors"][name]}"/>')
         cx += w
     b.append("</g>")
     colw = bwid / 3
@@ -311,7 +361,7 @@ def render(s, theme):
     b.append(text(f"{s['repos']} public repositories  ·  {s['stars']} stars  ·  {s['followers']} followers", 16, 36, yy + 16, th["muted"], "medium"))
     b.append(text(f"Updated {short(s['today'])}", 16, W - 36, yy + 16, th["faint"], "medium", "end"))
     H = yy + 44
-    files["activity-languages"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Top languages: " + ", ".join(f"{n} {100*v/total:.1f}%" for n, v in top))
+    files["activity-languages"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Top languages: " + ", ".join(f"{n} {100*v/total:.1f}%" for n, v in top), GROW + REDUCED)
     return files
 
 

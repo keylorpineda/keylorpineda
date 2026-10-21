@@ -63,33 +63,46 @@ def header(theme):
     b.append(text("Now building", 17, 102, 416, th["muted"], "medium"))
     b.append(text("HealthyCropping", 17, 102 + tw("Now building ", 17, "medium"), 416, th["text"], "medium"))
 
-    # KP monogram drawn as a contribution grid
+    # KP monogram drawn as a contribution grid. The letters are "written" cell by cell
+    # in stroke order, glow, catch a light sweep, then fade out and start again.
     R = rng(11)
     rows, cols, step, cell = 9, 13, 31, 25
     gx = W - 52 - (cols * step - (step - cell))
     gy = (H - (rows * step - (step - cell))) / 2
+    k_order = [(r, 0) for r in range(7)] + [(3, 1), (2, 2), (1, 3), (0, 4), (4, 2), (5, 3), (6, 4)]
+    p_order = [(r, 0) for r in range(7)] + [(0, 1), (0, 2), (0, 3), (1, 4), (2, 4), (3, 3), (3, 2), (3, 1)]
+    order = {}
+    for i, (r, c) in enumerate(k_order):
+        order[(r + 1, c + 1)] = i * 0.075
+    for i, (r, c) in enumerate(p_order):
+        order[(r + 1, c + 7)] = len(k_order) * 0.075 + 0.3 + i * 0.075
+    base, lit_cells, glow, twinkle, shine = [], [], [], [], []
     for c in range(cols):
         for r in range(rows):
-            lit = False
-            if 1 <= r <= 7:
-                if 1 <= c <= 5:
-                    lit = K[r - 1][c - 1] == "X"
-                elif 7 <= c <= 11:
-                    lit = P[r - 1][c - 7] == "X"
             x, y = gx + c * step, gy + r * step
-            if lit:
-                op = R.choice([0.9, 1, 1])
-                b.append(f'<rect x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="6" fill="{th["accent"]}" opacity="{op}"/>')
-            else:
-                faint = R.random() < 0.05
-                fill, op = (th["accent"], 0.18) if faint else (th["cell"], 1)
-                b.append(f'<rect x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="6" fill="{fill}" opacity="{op}"/>')
-            delay = (c * 0.09 + r * 0.05)
-            if not lit:
-                b.append(f'<rect class="w" style="animation-delay:{delay:.2f}s" x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="6" fill="{th["accent"]}" opacity="0"/>')
+            rect = f'x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="6"'
+            base.append(f'<rect {rect} fill="{th["cell"]}"/>')
+            if (r, c) in order:
+                d = order[(r, c)]
+                lit_cells.append(f'<rect class="k" style="animation-delay:{d:.3f}s" {rect} fill="{th["accent"]}"/>')
+                glow.append(f'<rect {rect} fill="{th["accent"]}"/>')
+                shine.append(f'<rect class="s" style="animation-delay:{3.4 + c * 0.06 + r * 0.03:.2f}s" {rect} fill="#FFFFFF" opacity="0"/>')
+            elif R.random() < 0.3:
+                twinkle.append(f'<rect class="t" style="animation-duration:{R.uniform(4, 9):.1f}s;animation-delay:{R.uniform(0, 6):.1f}s" {rect} fill="{th["accent"]}" opacity="0"/>')
+    b.append(f'<filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>')
+    b += base + twinkle
+    b.append(f'<g class="g" filter="url(#glow)" opacity="0">{"".join(glow)}</g>')
+    b += lit_cells + shine
     style = (
-        ".w{animation:wave 8s ease-in-out infinite}"
-        "@keyframes wave{0%,100%{opacity:0}7%{opacity:.3}16%{opacity:0}}"
+        ".k{transform-box:fill-box;transform-origin:center;animation:draw 12s cubic-bezier(.2,.7,.3,1) infinite backwards}"
+        "@keyframes draw{0%{opacity:0;transform:scale(.2)}2.2%{opacity:1;transform:scale(1.18)}3.8%{opacity:1;transform:scale(1)}"
+        "84%{opacity:1;transform:scale(1)}88%,100%{opacity:0;transform:scale(.5)}}"
+        ".g{animation:glow 12s ease-in-out infinite}"
+        "@keyframes glow{0%,22%{opacity:0}34%{opacity:.55}55%{opacity:.25}72%{opacity:.45}86%,100%{opacity:0}}"
+        ".s{animation:shine 12s ease-out infinite backwards}"
+        "@keyframes shine{0%{opacity:0}2%{opacity:.5}7%,100%{opacity:0}}"
+        ".t{animation:tw 6s ease-in-out infinite}"
+        "@keyframes tw{0%,100%{opacity:0}50%{opacity:.22}}"
         ".halo{transform-box:fill-box;transform-origin:center;animation:halo 2.4s ease-out infinite}"
         "@keyframes halo{0%{transform:scale(.6);opacity:.5}100%{transform:scale(2);opacity:0}}" + REDUCED
     )
