@@ -1,0 +1,47 @@
+name: Profile activity
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Render activity card from the GitHub API
+        env:
+          # Optional METRICS_TOKEN (classic PAT, read:user) also counts private contributions.
+          GITHUB_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          pip install --quiet fonttools uharfbuzz
+          python scripts/stats.py dist
+
+      - name: Generate snake animations
+        uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/snake-light.svg?palette=github-light&color_snake=#A86B12&color_dots=#EDF0F3,#F2DDB5,#E2B868,#C48A2C,#A86B12
+            dist/snake-dark.svg?palette=github-dark&color_snake=#E3A857&color_dots=#161C25,#3D311E,#6B5229,#A87A36,#E3A857
+
+      - name: Publish to the output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+          commit_message: "chore: update profile activity"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
