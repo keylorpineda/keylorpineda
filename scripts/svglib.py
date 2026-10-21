@@ -77,9 +77,29 @@ F = {
 }
 
 
+_DEFS = {}
+
+
 def text(t, size, x, y, fill, weight="regular", anchor="start", tracking=0, extra=""):
-    d = F[weight].path(t, size, x, y, anchor, tracking)
-    return f'<path fill="{fill}" {extra} d="{d}"/>'
+    """Text as outlines; glyphs are defined once per document and reused with <use>."""
+    f = F[weight]
+    w = f.width(t, size, tracking)
+    if anchor == "middle":
+        x -= w / 2
+    elif anchor == "end":
+        x -= w
+    s = size / f.upem
+    uses, cx = [], 0.0
+    for gid, adv, xoff in f.shape(t):
+        key = f"{weight[:2]}{gid}"
+        if key not in _DEFS:
+            pen = SVGPathPen(f.glyphs, ntos=lambda n: str(round(n)))
+            f.glyphs[f.order[gid]].draw(pen)
+            _DEFS[key] = pen.getCommands()
+        if _DEFS[key]:
+            uses.append(f'<use href="#{key}" x="{round(cx + xoff)}"/>')
+        cx += adv + tracking / s
+    return f'<g fill="{fill}" {extra} transform="translate({fmt(x)} {fmt(y)}) scale({s:.5f} {-s:.5f})">{"".join(uses)}</g>'
 
 
 def tw(t, size, weight="regular", tracking=0):
@@ -209,10 +229,13 @@ def chips(slugs, x, y, maxw, th, h=38, fs=15, gap=10, labels=None, fill=None):
     return "".join(out), cy + h - y
 
 
-def svg_doc(w, h, body, title, style=""):
+def svg_doc(w, h, body, title, style="", width=None):
+    defs = "".join(f'<path id="{k}" d="{d}"/>' for k, d in _DEFS.items() if d)
+    _DEFS.clear()
+    size = f'width="{width}" height="{fmt(h * width / w)}"' if width else f'width="{fmt(w)}" height="{fmt(h)}"'
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{title}">'
-        f"<title>{title}</title>"
+        f'<svg xmlns="http://www.w3.org/2000/svg" {size} viewBox="0 0 {fmt(w)} {fmt(h)}" role="img" aria-label="{title}">'
+        f"<title>{title}</title><defs>{defs}</defs>"
         + (f"<style>{style}</style>" if style else "")
         + body
         + "</svg>"

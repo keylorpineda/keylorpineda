@@ -175,60 +175,65 @@ def short(d):
     return d.strftime("%b %-d, %Y")
 
 
+def card(W, H, th):
+    return f'<rect x=".5" y=".5" width="{W-1}" height="{H-1}" rx="24" fill="{th["card"]}" stroke="{th["border"]}"/>'
+
+
+STYLE = (
+    ".w{animation:wave 12s ease-in-out infinite}"
+    "@keyframes wave{0%,100%{opacity:0}5%{opacity:.9}12%{opacity:0}}"
+    "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
+)
+
+
 def render(s, theme):
     th = THEMES[theme]
-    W = 1200
+    W = 1000
     year = s["year"]
     cal = year["contributionCalendar"]
     weeks = cal["weeks"]
     all_time = sum(s["days"].values())
     cur, (cs, ce), longest, (ls, le) = streaks(s["days"], s["today"])
-    b = []
+    files = {}
 
-    # ---- stat tiles
+    # ---- stat tiles, 2 x 2
     tiles = [
-        (f"{cal['totalContributions']:,}", "Contributions", "in the last 12 months"),
-        (f"{all_time:,}", "All time", f"since {s['created'].strftime('%b %Y')}"),
-        (f"{cur}", "Current streak", f"{short(cs)} to today" if cur else "starts with the next commit", ),
-        (f"{longest}", "Longest streak", f"{short(ls)} to {short(le)}" if longest else "no streak yet"),
+        (f"{cal['totalContributions']:,}", "", "Contributions", "in the last 12 months"),
+        (f"{all_time:,}", "", "All time", f"since {s['created'].strftime('%b %Y')}"),
+        (f"{cur}", "day" if cur == 1 else "days", "Current streak", f"since {short(cs)}" if cur else "starts with the next commit"),
+        (f"{longest}", "day" if longest == 1 else "days", "Longest streak", f"{short(ls)} to {short(le)}" if longest else "no streak yet"),
     ]
     gap = 16
-    tw_ = (W - 3 * gap) / 4
-    for i, (num, lab, sub) in enumerate(tiles):
-        x = i * (tw_ + gap)
-        b.append(f'<rect x="{fmt(x+.5)}" y=".5" width="{fmt(tw_-1)}" height="135" rx="18" fill="{th["card"]}" stroke="{th["border"]}"/>')
-        b.append(text(lab.upper(), 11.5, x + 26, 38, th["accent"] if i == 2 else th["muted"], "semibold", tracking=1.8))
-        unit = (" day" if num == "1" else " days") if i >= 2 else ""
-        b.append(text(num, 44, x + 24, 92, th["text"], "display", tracking=-1))
+    tw_, th_ = (W - gap) / 2, 150
+    b = []
+    for i, (num, unit, lab, sub) in enumerate(tiles):
+        x = (i % 2) * (tw_ + gap)
+        y = (i // 2) * (th_ + gap)
+        b.append(f'<rect x="{fmt(x+.5)}" y="{fmt(y+.5)}" width="{fmt(tw_-1)}" height="{th_-1}" rx="22" fill="{th["card"]}" stroke="{th["border"]}"/>')
+        b.append(text(lab.upper(), 14, x + 34, y + 44, th["accent"] if i == 2 else th["muted"], "semibold", tracking=2.2))
+        b.append(text(num, 54, x + 31, y + 104, th["text"], "display", tracking=-1.2))
         if unit:
-            b.append(text(unit.strip(), 16, x + 24 + tw(num, 44, "display", -1) + 8, 92, th["muted"], "medium"))
-        b.append(text(sub, 12.5, x + 26, 117, th["faint"], "medium"))
+            b.append(text(unit, 21, x + 31 + tw(num, 54, "display", -1.2) + 10, y + 104, th["muted"], "medium"))
+        b.append(text(sub, 16, x + 34, y + 130, th["faint"], "medium"))
+    H = 2 * th_ + gap
+    files["activity-stats"] = svg_doc(W, H, "".join(b), f"{cal['totalContributions']} contributions in the last year, {all_time} all time, current streak {cur} days, longest streak {longest} days")
 
-    # ---- heatmap
-    y0 = 136 + gap
-    cell, step = 15, 19
+    # ---- calendar
+    cell, step = 14, 17
     grid_w = len(weeks) * step - (step - cell)
-    hx = (W - grid_w) / 2 + 14
-    hh = 7 * step + 118
-    b.append(f'<rect x=".5" y="{y0+.5}" width="{W-1}" height="{hh}" rx="18" fill="{th["card"]}" stroke="{th["border"]}"/>')
-    b.append(text(f"{cal['totalContributions']:,} contributions in the last year", 16, 34, y0 + 42, th["text"], "semibold"))
+    hx = W - 32 - grid_w
+    b = []
+    b.append(text(f"{cal['totalContributions']:,} contributions in the last year", 21, 32, 52, th["text"], "semibold"))
     levels = {"NONE": (th["cell"], 1), "FIRST_QUARTILE": (th["accent"], 0.3), "SECOND_QUARTILE": (th["accent"], 0.52),
               "THIRD_QUARTILE": (th["accent"], 0.76), "FOURTH_QUARTILE": (th["accent"], 1)}
-    lx = W - 34
-    b.append(text("More", 11.5, lx, y0 + 41, th["faint"], "medium", "end"))
-    lx -= tw("More", 11.5, "medium") + 8 + 5 * 15 - 3
-    for i, k in enumerate(levels):
-        c, o = levels[k]
-        b.append(f'<rect x="{fmt(lx + i*15)}" y="{y0+30}" width="12" height="12" rx="3" fill="{c}" opacity="{o}"/>')
-    b.append(text("Less", 11.5, lx - 8, y0 + 41, th["faint"], "medium", "end"))
-    gy = y0 + 86
+    gy = 108
     last_month = None
     weekday_counts = Counter()
     busiest = ("", 0)
     for wi, w in enumerate(weeks):
         for d in w["contributionDays"]:
             date = dt.date.fromisoformat(d["date"])
-            wd = (date.weekday() + 1) % 7  # Sunday first, like GitHub
+            wd = (date.weekday() + 1) % 7
             weekday_counts[date.strftime("%A")] += d["contributionCount"]
             if d["contributionCount"] > busiest[1]:
                 busiest = (d["date"], d["contributionCount"])
@@ -240,73 +245,74 @@ def render(s, theme):
             if date.day <= 7 and wd == 0 and date.month != last_month:
                 last_month = date.month
                 if wi < len(weeks) - 2:
-                    b.append(text(date.strftime("%b"), 11.5, x, gy - 12, th["muted"], "medium"))
+                    b.append(text(date.strftime("%b"), 14, x, gy - 14, th["muted"], "medium"))
     for wd, name in ((1, "Mon"), (3, "Wed"), (5, "Fri")):
-        b.append(text(name, 11, hx - 12, gy + wd * step + 11.5, th["faint"], "medium", "end"))
+        b.append(text(name, 13, hx - 10, gy + wd * step + 11.5, th["faint"], "medium", "end"))
+    ly = gy + 7 * step + 34
+    fav = weekday_counts.most_common(1)[0][0] if weekday_counts and weekday_counts.most_common(1)[0][1] else None
+    facts = []
+    if busiest[1]:
+        facts.append(f"Busiest day: {short(busiest[0])}, {busiest[1]} contributions")
+    if fav:
+        facts.append(f"Most active on {fav}s")
+    b.append(text("   ·   ".join(facts), 15, 32, ly, th["muted"], "medium"))
+    lx = W - 32
+    b.append(text("More", 14, lx, ly, th["faint"], "medium", "end"))
+    lx -= tw("More", 14, "medium") + 8 + 5 * 18 - 4
+    for i, k in enumerate(levels):
+        c, o = levels[k]
+        b.append(f'<rect x="{fmt(lx + i*18)}" y="{ly-12}" width="14" height="14" rx="3.5" fill="{c}" opacity="{o}"/>')
+    b.append(text("Less", 14, lx - 8, ly, th["faint"], "medium", "end"))
+    H = ly + 32
+    files["activity-calendar"] = svg_doc(W, H, card(W, H, th) + "".join(b), f"Contribution calendar: {cal['totalContributions']} contributions in the last year", STYLE)
 
-    # ---- bottom row
-    y1 = y0 + hh + gap
-    bw = (W - gap) / 2
-    bh = 236
-    # breakdown
-    b.append(f'<rect x=".5" y="{y1+.5}" width="{fmt(bw-1)}" height="{bh}" rx="18" fill="{th["card"]}" stroke="{th["border"]}"/>')
-    b.append(text("LAST 12 MONTHS", 11.5, 30, y1 + 38, th["muted"], "semibold", tracking=1.8))
+    # ---- breakdown
     rows = [
         ("Commits", year["totalCommitContributions"] + year["restrictedContributionsCount"]),
         ("Pull requests", year["totalPullRequestContributions"]),
-        ("Code reviews", year["totalPullRequestReviewContributions"]),
         ("Issues", year["totalIssueContributions"]),
-        ("Repositories created", year["totalRepositoryContributions"]),
+        ("Code reviews", year["totalPullRequestReviewContributions"]),
+        ("New repositories", year["totalRepositoryContributions"]),
     ]
+    b = [text("LAST 12 MONTHS", 15, 36, 54, th["muted"], "semibold", tracking=2.2)]
     mx = max(v for _, v in rows) or 1
     for i, (lab, v) in enumerate(rows):
-        yy = y1 + 72 + i * 32
-        b.append(text(lab, 14, 30, yy, th["text"], "medium"))
-        bx, bwid = 210, bw - 210 - 90
-        b.append(f'<rect x="{bx}" y="{yy-9}" width="{fmt(bwid)}" height="8" rx="4" fill="{th["cell"]}"/>')
-        b.append(f'<rect x="{bx}" y="{yy-9}" width="{fmt(max(bwid * v / mx, 8 if v else 0))}" height="8" rx="4" fill="{th["accent"]}"/>')
-        b.append(text(f"{v:,}", 14, bw - 30, yy, th["text"], "semibold", "end"))
-    # languages
-    x0 = bw + gap
-    b.append(f'<rect x="{fmt(x0+.5)}" y="{y1+.5}" width="{fmt(bw-1)}" height="{bh}" rx="18" fill="{th["card"]}" stroke="{th["border"]}"/>')
-    b.append(text("TOP LANGUAGES  ·  PUBLIC REPOS", 11.5, x0 + 30, y1 + 38, th["muted"], "semibold", tracking=1.8))
+        yy = 104 + i * 48
+        b.append(text(lab, 20, 36, yy, th["text"], "medium"))
+        bx, bwid = 260, W - 260 - 140
+        b.append(f'<rect x="{bx}" y="{yy-12}" width="{fmt(bwid)}" height="10" rx="5" fill="{th["cell"]}"/>')
+        b.append(f'<rect x="{bx}" y="{yy-12}" width="{fmt(max(bwid * v / mx, 10 if v else 0))}" height="10" rx="5" fill="{th["accent"]}"/>')
+        b.append(text(f"{v:,}", 20, W - 36, yy, th["text"], "semibold", "end"))
+    H = 104 + len(rows) * 48 - 12
+    files["activity-breakdown"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Contribution breakdown: " + ", ".join(f"{k} {v}" for k, v in rows))
+
+    # ---- languages
     total = sum(s["langs"].values()) or 1
     top = s["langs"].most_common(6)
-    bx, bwid = x0 + 30, bw - 60
+    b = [text("TOP LANGUAGES IN PUBLIC REPOS", 15, 36, 54, th["muted"], "semibold", tracking=2.2)]
+    bx, bwid = 36, W - 72
+    b.append(f'<clipPath id="lb"><rect x="{bx}" y="76" width="{bwid}" height="14" rx="7"/></clipPath><g clip-path="url(#lb)">')
+    b.append(f'<rect x="{bx}" y="76" width="{bwid}" height="14" fill="{th["cell"]}"/>')
     cx = bx
-    b.append(f'<clipPath id="lb"><rect x="{fmt(bx)}" y="{y1+58}" width="{fmt(bwid)}" height="10" rx="5"/></clipPath><g clip-path="url(#lb)">')
-    b.append(f'<rect x="{fmt(bx)}" y="{y1+58}" width="{fmt(bwid)}" height="10" fill="{th["cell"]}"/>')
     for name, size in top:
         w = bwid * size / total
-        b.append(f'<rect x="{fmt(cx)}" y="{y1+58}" width="{fmt(w)}" height="10" fill="{s["colors"][name]}"/>')
+        b.append(f'<rect x="{fmt(cx)}" y="76" width="{fmt(w)}" height="14" fill="{s["colors"][name]}"/>')
         cx += w
     b.append("</g>")
+    colw = bwid / 3
     for i, (name, size) in enumerate(top):
-        col, row = i % 2, i // 2
-        xx = bx + col * (bwid / 2)
-        yy = y1 + 112 + row * 40
-        b.append(f'<circle cx="{fmt(xx+6)}" cy="{yy-5}" r="6" fill="{s["colors"][name]}"/>')
-        b.append(text(name, 14, xx + 22, yy, th["text"], "medium"))
-        b.append(text(f"{100*size/total:.1f}%", 14, xx + bwid / 2 - 30, yy, th["muted"], "medium", "end"))
-
-    # ---- footer facts
-    y2 = y1 + bh + 34
-    fav = weekday_counts.most_common(1)[0][0] if weekday_counts and weekday_counts.most_common(1)[0][1] else "n/a"
-    facts = [
-        f"Busiest day: {short(busiest[0])} with {busiest[1]} contributions" if busiest[1] else "Busiest day: n/a",
-        f"Most active on {fav}s",
-        f"{s['repos']} public repos  ·  {s['stars']} stars  ·  {s['followers']} followers",
-    ]
-    b.append(text("   ·   ".join(facts), 12.5, W / 2, y2, th["muted"], "medium", "middle"))
-    b.append(text(f"Live from the GitHub API, updated {short(s['today'])}", 11.5, W / 2, y2 + 24, th["faint"], "medium", "middle"))
-    H = y2 + 40
-    style = (
-        ".w{animation:wave 12s ease-in-out infinite}"
-        "@keyframes wave{0%,100%{opacity:0}5%{opacity:.9}12%{opacity:0}}"
-        "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
-    )
-    title = f"GitHub activity: {cal['totalContributions']} contributions in the last year, current streak {cur} days, longest streak {longest} days"
-    return svg_doc(W, H, "".join(b), title, style)
+        xx = bx + (i % 3) * colw
+        yy = 138 + (i // 3) * 46
+        b.append(f'<circle cx="{fmt(xx+8)}" cy="{yy-7}" r="7" fill="{s["colors"][name]}"/>')
+        b.append(text(name, 19, xx + 26, yy, th["text"], "medium"))
+        b.append(text(f"{100*size/total:.1f}%", 19, xx + colw - 30, yy, th["muted"], "medium", "end"))
+    yy = 138 + ((len(top) + 2) // 3) * 46 + 2
+    b.append(f'<path d="M36 {yy-18}H{W-36}" stroke="{th["border"]}"/>')
+    b.append(text(f"{s['repos']} public repositories  ·  {s['stars']} stars  ·  {s['followers']} followers", 16, 36, yy + 16, th["muted"], "medium"))
+    b.append(text(f"Updated {short(s['today'])}", 16, W - 36, yy + 16, th["faint"], "medium", "end"))
+    H = yy + 44
+    files["activity-languages"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Top languages: " + ", ".join(f"{n} {100*v/total:.1f}%" for n, v in top))
+    return files
 
 
 def main():
@@ -314,7 +320,8 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     data = mock() if "--mock" in sys.argv else fetch()
     for theme in ("dark", "light"):
-        (out / f"activity-{theme}.svg").write_text(render(data, theme))
+        for name, svg in render(data, theme).items():
+            (out / f"{name}-{theme}.svg").write_text(svg)
     print("activity cards written to", out)
 
 
