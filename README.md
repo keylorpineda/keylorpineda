@@ -89,49 +89,6 @@ Upload documents, ask in any language and get answers based only on what you upl
 
 <br>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-doomsday-dark.svg"><img src="assets/project-doomsday-light.svg" alt="Doomsday System: Camps, survivors and supplies in a post-apocalyptic world." width="100%"></picture>
-
-A management platform for camps, survivors, supplies and the transfers between outposts. The interesting part is the rules engine, which refuses impossible moves like shipping water a camp doesn't have. NestJS API, React dashboard, and end to end tests with Playwright on both sides.
-
-<p>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/nestjs-dark.svg"><img src="assets/chips/nestjs-light.svg" alt="NestJS" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/typescript-dark.svg"><img src="assets/chips/typescript-light.svg" alt="TypeScript" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/typeorm-dark.svg"><img src="assets/chips/typeorm-light.svg" alt="TypeORM" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/postgresql-dark.svg"><img src="assets/chips/postgresql-light.svg" alt="PostgreSQL" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/react-dark.svg"><img src="assets/chips/react-light.svg" alt="React" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/vite-dark.svg"><img src="assets/chips/vite-light.svg" alt="Vite" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/tailwindcss-dark.svg"><img src="assets/chips/tailwindcss-light.svg" alt="Tailwind CSS" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/python-dark.svg"><img src="assets/chips/python-light.svg" alt="Python" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/jest-dark.svg"><img src="assets/chips/jest-light.svg" alt="Jest" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/playwright-dark.svg"><img src="assets/chips/playwright-light.svg" alt="Playwright" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/docker-dark.svg"><img src="assets/chips/docker-light.svg" alt="Docker" height="36"></picture>
-</p>
-
-<br>
-
-<details>
-<summary><b>A few more things I've built</b></summary>
-<br>
-
-**[Non-Profit Intel Scraper](https://github.com/keylorpineda/nonprofit_intel_scraper)**  
-Scrapes nonprofit directories, enriches them with IRS 990 data and has Gemini score which ones are worth a sales call, and why.
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/python-dark.svg"><img src="assets/chips/python-light.svg" alt="Python" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/playwright-dark.svg"><img src="assets/chips/playwright-light.svg" alt="Playwright" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/googlegemini-dark.svg"><img src="assets/chips/googlegemini-light.svg" alt="Google Gemini" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/pydantic-dark.svg"><img src="assets/chips/pydantic-light.svg" alt="Pydantic" height="36"></picture>
-
-**[HealthyHabits API](https://github.com/keylorpineda/HealthyHabits-API)**  
-GraphQL API for routines, habits and progress tracking, with JWT auth and role based permissions.
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/java-dark.svg"><img src="assets/chips/java-light.svg" alt="Java" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/springboot-dark.svg"><img src="assets/chips/springboot-light.svg" alt="Spring Boot" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/graphql-dark.svg"><img src="assets/chips/graphql-light.svg" alt="GraphQL" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/mariadb-dark.svg"><img src="assets/chips/mariadb-light.svg" alt="MariaDB" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/docker-dark.svg"><img src="assets/chips/docker-light.svg" alt="Docker" height="36"></picture>
-
-</details>
-
 ## Toolbox
 
 **Languages**
@@ -234,7 +191,11 @@ Pulled from the GitHub API and refreshed every day.
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg" alt="Contribution calendar for the last year" width="100%"></picture>
 
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg" alt="Contributions per month over the last year" width="100%"></picture>
+
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg" alt="Repositories with the most commits in the last 12 months" width="100%"></picture>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg" alt="Top languages across public repositories" width="100%"></picture>
 

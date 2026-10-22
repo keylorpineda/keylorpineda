@@ -99,7 +99,9 @@ def text(t, size, x, y, fill, weight="regular", anchor="start", tracking=0, extr
         if _DEFS[key]:
             uses.append(f'<use href="#{key}" x="{round(cx + xoff)}"/>')
         cx += adv + tracking / s
-    return f'<g fill="{fill}" {extra} transform="translate({fmt(x)} {fmt(y)}) scale({s:.5f} {-s:.5f})">{"".join(uses)}</g>'
+    inner = f'<g fill="{fill}" transform="translate({fmt(x)} {fmt(y)}) scale({s:.5f} {-s:.5f})">{"".join(uses)}</g>'
+    # Animations set CSS transforms, so they go on a wrapper and never fight the glyph transform.
+    return f"<g {extra}>{inner}</g>" if extra else inner
 
 
 def tw(t, size, weight="regular", tracking=0):

@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from svglib import THEMES, fmt, icon, label_of, paragraph, rng, svg_doc, text, tw, wrap  # noqa: E402
-from visuals import v_booth, v_doomsday, v_healthy, v_rag  # noqa: E402
+from visuals import v_booth, v_healthy, v_rag  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 ASSETS = ROOT / "assets"
@@ -207,16 +207,6 @@ PROJECTS = [
         "capped at 4,000 tokens, and every answer shows the passages it came from.",
         tools=["python", "fastapi", "postgresql", "sqlalchemy", "cohere", "groq", "meta", "docker"],
         buttons=[("source-rag", "Source code", f"https://github.com/{USER}/RAG-Research-Engine")],
-    ),
-    dict(
-        name="doomsday", accent="#E0234E", kicker="FULL STACK  ·  API + DASHBOARD", title="Doomsday System",
-        tagline="Camps, survivors and supplies in a post-apocalyptic world.",
-        status="Full stack", visual=v_doomsday, url=None,
-        desc="A management platform for camps, survivors, supplies and the transfers between outposts. The interesting part "
-        "is the rules engine, which refuses impossible moves like shipping water a camp doesn't have. NestJS API, React "
-        "dashboard, and end to end tests with Playwright on both sides.",
-        tools=["nestjs", "typescript", "typeorm", "postgresql", "react", "vite", "tailwindcss", "python", "jest", "playwright", "docker"],
-        buttons=[],
     ),
 ]
 
@@ -444,22 +434,6 @@ def readme():
         md.append("")
         md.append("<br>")
     md.append("")
-    md.append("<details>")
-    md.append("<summary><b>A few more things I've built</b></summary>")
-    md.append("<br>")
-    md.append("")
-    md.append(f"**[Non-Profit Intel Scraper](https://github.com/{USER}/nonprofit_intel_scraper)**  ")
-    md.append("Scrapes nonprofit directories, enriches them with IRS 990 data and has Gemini score which ones are worth a sales call, and why.")
-    md.append("")
-    md.append(chips_md(["python", "playwright", "googlegemini", "pydantic"]))
-    md.append("")
-    md.append(f"**[HealthyHabits API](https://github.com/{USER}/HealthyHabits-API)**  ")
-    md.append("GraphQL API for routines, habits and progress tracking, with JWT auth and role based permissions.")
-    md.append("")
-    md.append(chips_md(["java", "springboot", "graphql", "mariadb", "docker"]))
-    md.append("")
-    md.append("</details>")
-    md.append("")
     md.append("## Toolbox")
     md.append("")
     for cat, slugs in TOOLBOX:
@@ -482,7 +456,9 @@ def readme():
     md.append("Pulled from the GitHub API and refreshed every day.")
     md.append("")
     for name, alt in (("activity-stats", "Contribution totals and streaks"), ("activity-calendar", "Contribution calendar for the last year"),
+                      ("activity-months", "Contributions per month over the last year"),
                       ("activity-breakdown", "Commits, pull requests, reviews and issues in the last 12 months"),
+                      ("activity-repos", "Repositories with the most commits in the last 12 months"),
                       ("activity-languages", "Top languages across public repositories")):
         md.append(pic(name, alt, width="100%", base=RAW))
         md.append("")

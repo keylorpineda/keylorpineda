@@ -46,6 +46,10 @@ query($login: String!, $from: DateTime!, $to: DateTime!) {
       totalIssueContributions
       totalRepositoryContributions
       restrictedContributionsCount
+      commitContributionsByRepository(maxRepositories: 10) {
+        repository { name isPrivate primaryLanguage { name color } }
+        contributions { totalCount }
+      }
       contributionCalendar {
         totalContributions
         weeks { contributionDays { date contributionCount contributionLevel } }
@@ -139,6 +143,12 @@ def mock():
         totalCommitContributions=int(total * 0.8), totalPullRequestContributions=96, totalPullRequestReviewContributions=31,
         totalIssueContributions=58, totalRepositoryContributions=9, restrictedContributionsCount=0,
         contributionCalendar={"totalContributions": total, "weeks": weeks},
+        commitContributionsByRepository=[
+            {"repository": {"name": n, "isPrivate": False, "primaryLanguage": {"name": l, "color": c}}, "contributions": {"totalCount": v}}
+            for n, l, c, v in (("healthycropping", "TypeScript", "#3178c6", 612), ("booth", "TypeScript", "#3178c6", 388),
+                               ("PokeScript", "TypeScript", "#3178c6", 120), ("RAG-Research-Engine", "Python", "#3572A5", 64),
+                               ("HealthyHabits-API", "Java", "#b07219", 31))
+        ],
     )
     langs = Counter({"TypeScript": 900000, "Python": 520000, "Java": 210000, "CSS": 80000, "JavaScript": 60000, "Shell": 9000, "Dockerfile": 4000})
     colors = {"TypeScript": "#3178c6", "Python": "#3572A5", "Java": "#b07219", "CSS": "#663399", "JavaScript": "#f1e05a", "Shell": "#89e051", "Dockerfile": "#384d54"}
@@ -258,7 +268,7 @@ def render(s, theme):
                      f'<circle cx="12" cy="12" r="6" fill="{th["accent"]}"/></g>')
         b.append(text(sub, 16, x + 34, y + 130, th["faint"], "medium"))
     H = 2 * th_ + gap
-    files["activity-stats"] = svg_doc(W, H, "".join(b), f"{cal['totalContributions']} contributions in the last year, {all_time} all time, current streak {cur} days, longest streak {longest} days", ODO + GROW + STYLE)
+    files["activity-stats"] = svg_doc(W, H, "".join(b), f"{cal['totalContributions']} contributions in the last year, {all_time} all time, current streak {cur} day{'' if cur == 1 else 's'}, longest streak {longest} day{'' if longest == 1 else 's'}", ODO + GROW + STYLE)
 
     # ---- calendar
     cell, step = 14, 17
@@ -362,7 +372,112 @@ def render(s, theme):
     b.append(text(f"Updated {short(s['today'])}", 16, W - 36, yy + 16, th["faint"], "medium", "end"))
     H = yy + 44
     files["activity-languages"] = svg_doc(W, H, card(W, H, th) + "".join(b), "Top languages: " + ", ".join(f"{n} {100*v/total:.1f}%" for n, v in top), GROW + REDUCED)
+    files["activity-months"] = months_card(s, th)
+    files["activity-repos"] = repos_card(s, th)
     return files
+
+
+def months_card(s, th):
+    W, H = 1000, 380
+    today = s["today"]
+    months = []
+    y, m = today.year, today.month
+    for _ in range(12):
+        months.append((y, m))
+        m -= 1
+        if m == 0:
+            y, m = y - 1, 12
+    months.reverse()
+    totals = Counter()
+    for ds, v in s["days"].items():
+        d = dt.date.fromisoformat(ds)
+        totals[(d.year, d.month)] += v
+    vals = [totals[k] for k in months]
+    mx = max(vals) or 1
+    cur, prev = vals[-1], vals[-2]
+    b = [card(W, H, th)]
+    b.append(text("CONTRIBUTIONS PER MONTH", 15, 36, 54, th["muted"], "semibold", tracking=2.2))
+    name = dt.date(*months[-1], 1).strftime("%B")
+    pname = dt.date(*months[-2], 1).strftime("%B")
+    if prev:
+        delta = (cur - prev) / prev * 100
+        trend = f"{'up' if delta >= 0 else 'down'} {abs(delta):.0f}% from {pname}"
+    else:
+        trend = f"nothing in {pname}"
+    head = f"{cur:,} in {name} so far"
+    b.append(text(head, 22, 36, 92, th["text"], "semibold"))
+    b.append(text(trend, 16, 36 + tw(head, 22, "semibold") + 14, 92, th["accent"] if (not prev or cur >= prev) else th["muted"], "medium"))
+    px0, px1, base, top = 40, W - 40, H - 62, 136
+    slot = (px1 - px0) / 12
+    cw = slot * 0.56
+    b.append(f'<path class="draw" d="M{px0} {base}H{px1}" stroke="{th["border"]}" stroke-width="1.5" pathLength="1"/>')
+    pts = []
+    best = vals.index(max(vals))
+    for i, ((yy, mm), v) in enumerate(zip(months, vals)):
+        cx = px0 + slot * i + (slot - cw) / 2
+        h = (base - top) * v / mx
+        h = max(h, 4) if v else 0
+        last = i == 11
+        fill = th["accent"]
+        op = 1 if i == best else 0.55
+        if h:
+            b.append(f'<rect class="col" style="animation-delay:{.15 + i*.07:.2f}s" x="{fmt(cx)}" y="{fmt(base - h)}" width="{fmt(cw)}" height="{fmt(h)}" rx="7" fill="{fill}" opacity="{op}"/>')
+            if last:
+                b.append(f'<rect class="live" x="{fmt(cx - 4)}" y="{fmt(base - h - 4)}" width="{fmt(cw + 8)}" height="{fmt(h + 4)}" rx="9" fill="none" stroke="{th["accent"]}" stroke-width="1.5" stroke-dasharray="5 5"/>')
+            if i == best:
+                b.append(f'<rect class="glowc" x="{fmt(cx)}" y="{fmt(base - h)}" width="{fmt(cw)}" height="{fmt(h)}" rx="7" fill="#FFFFFF" opacity="0"/>')
+        b.append(text(f"{v:,}", 14, cx + cw / 2, base - h - 10, th["text"] if i == best else th["muted"], "semibold",
+                      "middle", extra=f'class="val" style="animation-delay:{.9 + i*.07:.2f}s"'))
+        b.append(text(dt.date(yy, mm, 1).strftime("%b"), 14, cx + cw / 2, base + 26, th["faint"], "medium", "middle"))
+        pts.append((cx + cw / 2, base - h - 30 if v else base - 30))
+    b.append(text("Best month", 12.5, pts[best][0], top - 18 if (base - top) * vals[best] / mx > (base - top) - 20 else pts[best][1] - 2,
+                  th["accent"], "semibold", "middle", extra='class="val" style="animation-delay:1.8s"'))
+    style = (
+        ".col{transform-box:fill-box;transform-origin:center bottom;animation:col 1s cubic-bezier(.2,.8,.25,1.15) backwards}"
+        "@keyframes col{from{transform:scaleY(0)}}"
+        ".val{animation:val .6s ease-out backwards}@keyframes val{from{opacity:0;transform:translateY(8px)}}"
+        ".draw{stroke-dasharray:1;animation:draw 1s ease-out backwards}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}"
+        ".live{animation:live 1.6s linear infinite}@keyframes live{to{stroke-dashoffset:-20}}"
+        ".glowc{animation:gc 5s ease-in-out 2s infinite}@keyframes gc{0%,100%{opacity:0}50%{opacity:.22}}"
+        + REDUCED
+    )
+    return svg_doc(W, H, "".join(b), f"Contributions per month. {head}, {trend}.", style)
+
+
+def repos_card(s, th):
+    W = 1000
+    repos = [r for r in s["year"].get("commitContributionsByRepository", []) if not r["repository"]["isPrivate"]][:6]
+    rows = len(repos)
+    H = 104 + max(rows, 1) * 52
+    b = [card(W, H, th)]
+    b.append(text("MOST COMMITS BY REPOSITORY  ·  LAST 12 MONTHS", 15, 36, 54, th["muted"], "semibold", tracking=2.2))
+    b.append('<linearGradient id="sh" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
+             '<stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>')
+    mx = max((r["contributions"]["totalCount"] for r in repos), default=1) or 1
+    bx, bwid = 300, W - 300 - 110
+    for i, r in enumerate(repos):
+        yy = 104 + i * 52
+        name = r["repository"]["name"]
+        lang = r["repository"]["primaryLanguage"] or {"name": "", "color": th["accent"]}
+        col = lang["color"] or th["accent"]
+        v = r["contributions"]["totalCount"]
+        disp = name if tw(name, 19, "medium") < 230 else name[:20] + "…"
+        b.append(f'<circle cx="44" cy="{yy - 7}" r="6" fill="{col}"/>')
+        b.append(text(disp, 19, 60, yy, th["text"], "medium", extra=f'class="val" style="animation-delay:{.1 + i*.1:.2f}s"'))
+        w = max(bwid * v / mx, 10)
+        b.append(f'<rect x="{bx}" y="{yy - 14}" width="{fmt(bwid)}" height="12" rx="6" fill="{th["cell"]}"/>')
+        b.append(f'<clipPath id="r{i}"><rect x="{bx}" y="{yy - 14}" width="{fmt(w)}" height="12" rx="6"/></clipPath>')
+        b.append(f'<g clip-path="url(#r{i})"><rect class="bar" style="animation-delay:{.25 + i*.12:.2f}s" x="{bx}" y="{yy - 14}" width="{fmt(w)}" height="12" fill="{col}"/>'
+                 f'<rect class="sh" style="animation-delay:{2 + i*.25:.2f}s" x="{bx - 160}" y="{yy - 14}" width="160" height="12" fill="url(#sh)"/></g>')
+        b.append(text(f"{v:,}", 19, W - 36, yy, th["text"], "semibold", "end", extra=f'class="val" style="animation-delay:{.9 + i*.12:.2f}s"'))
+    if not repos:
+        b.append(text("No public commits in the last 12 months yet.", 18, 36, 110, th["muted"], "medium"))
+    style = GROW + (
+        ".val{animation:val .6s ease-out backwards}@keyframes val{from{opacity:0;transform:translateX(-8px)}}"
+        f".sh{{animation:sh 4s ease-in-out infinite}}@keyframes sh{{0%{{transform:translateX(0)}}40%,100%{{transform:translateX({bwid + 160}px)}}}}"
+        + REDUCED
+    )
+    return svg_doc(W, H, "".join(b), "Most commits by repository: " + ", ".join(f'{r["repository"]["name"]} {r["contributions"]["totalCount"]}' for r in repos), style)
 
 
 def main():
