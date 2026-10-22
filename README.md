@@ -68,19 +68,20 @@ Small businesses already sell through WhatsApp, one chat at a time. Booth gives 
 
 <br>
 
-<a href="https://github.com/keylorpineda/RAG-Research-Engine"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-rag-dark.svg"><img src="assets/project-rag-light.svg" alt="RAG Research Engine: Answers grounded only in the documents you upload." width="100%"></picture></a>
+<a href="https://github.com/keylorpineda/RAG-Research-Engine"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-rag-dark.svg"><img src="assets/project-rag-light.svg" alt="RAG Research Engine: Answers from your documents, with sources, and no answer when the evidence is missing." width="100%"></picture></a>
 
-Upload documents, ask in any language and get answers based only on what you uploaded. When the context doesn't hold the answer, it says so instead of making one up. Retrieval favors more recent files, the context is capped at 4,000 tokens, and every answer shows the passages it came from.
+Upload PDFs and notes, ask in English or Spanish, and get answers that cite the exact passages they use. Retrieval fuses pgvector and Postgres full-text search with Reciprocal Rank Fusion, an optional Cohere reranker reorders the results, and a calibrated gate refuses before the model is called when the documents don't hold the answer. A benchmark runs on every pull request and fails if quality drops.
 
 <p>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/python-dark.svg"><img src="assets/chips/python-light.svg" alt="Python" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/fastapi-dark.svg"><img src="assets/chips/fastapi-light.svg" alt="FastAPI" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/postgresql-dark.svg"><img src="assets/chips/postgresql-light.svg" alt="PostgreSQL" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/sqlalchemy-dark.svg"><img src="assets/chips/sqlalchemy-light.svg" alt="SQLAlchemy" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/cohere-dark.svg"><img src="assets/chips/cohere-light.svg" alt="Cohere" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/angular-dark.svg"><img src="assets/chips/angular-light.svg" alt="Angular" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/cohere-dark.svg"><img src="assets/chips/cohere-light.svg" alt="Cohere Rerank" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/groq-dark.svg"><img src="assets/chips/groq-light.svg" alt="Groq" height="36"></picture>
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/meta-dark.svg"><img src="assets/chips/meta-light.svg" alt="Llama 3.3" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/docker-dark.svg"><img src="assets/chips/docker-light.svg" alt="Docker" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/pytest-dark.svg"><img src="assets/chips/pytest-light.svg" alt="Pytest" height="36"></picture>
 </p>
 
 <p>
@@ -89,7 +90,43 @@ Upload documents, ask in any language and get answers based only on what you upl
 
 <br>
 
+## Certifications
+
+<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-oci-architect-dark.svg"><img src="assets/cert-oci-architect-light.svg" alt="Oracle Cloud Infrastructure Certified Architect Associate" width="100%"></picture></a>
+
+<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-oci-ai-dark.svg"><img src="assets/cert-oci-ai-light.svg" alt="Oracle Cloud Infrastructure Certified AI Foundations Associate" width="100%"></picture></a>
+
+<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-gcp-dark.svg"><img src="assets/cert-gcp-light.svg" alt="Google Cloud Computing Foundations Certificate" width="100%"></picture></a>
+
+<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-aws-dark.svg"><img src="assets/cert-aws-light.svg" alt="Advanced Generative AI Implementation on AWS" width="100%"></picture></a>
+
+## Activity
+
+Pulled from the GitHub API and refreshed every day.
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202610221134"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202610221134" alt="Contribution totals and streaks" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202610221134"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202610221134" alt="Contribution calendar for the last year" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202610221134"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202610221134" alt="Contributions per month over the last year" width="100%"></picture>
+
+<details>
+<summary><b>More activity: breakdown, most active repositories and languages</b></summary>
+<br>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202610221134"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202610221134" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202610221134"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202610221134" alt="My most active repositories in the last 12 months" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202610221134"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202610221134" alt="Top languages across public repositories" width="100%"></picture>
+
+</details>
+
 ## Toolbox
+
+<details>
+<summary><b>Languages, frameworks, data, cloud and tooling I work with</b></summary>
+<br>
 
 **Languages**
 
@@ -105,6 +142,7 @@ Upload documents, ask in any language and get answers based only on what you upl
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/react-dark.svg"><img src="assets/chips/react-light.svg" alt="React" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/reactnative-dark.svg"><img src="assets/chips/reactnative-light.svg" alt="React Native" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/expo-dark.svg"><img src="assets/chips/expo-light.svg" alt="Expo" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/angular-dark.svg"><img src="assets/chips/angular-light.svg" alt="Angular" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/vite-dark.svg"><img src="assets/chips/vite-light.svg" alt="Vite" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/tailwindcss-dark.svg"><img src="assets/chips/tailwindcss-light.svg" alt="Tailwind CSS" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/reactquery-dark.svg"><img src="assets/chips/reactquery-light.svg" alt="TanStack Query" height="36"></picture>
@@ -165,7 +203,13 @@ Upload documents, ask in any language and get answers based only on what you upl
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/git-dark.svg"><img src="assets/chips/git-light.svg" alt="Git" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/postman-dark.svg"><img src="assets/chips/postman-light.svg" alt="Postman" height="36"></picture>
 
+</details>
+
 ## Where I'm heading
+
+<details>
+<summary><b>AWS, Databricks and cybersecurity</b></summary>
+<br>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/interest-aws-dark.svg"><img src="assets/interest-aws-light.svg" alt="AWS" width="100%"></picture>
 
@@ -173,31 +217,7 @@ Upload documents, ask in any language and get answers based only on what you upl
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/interest-shield-dark.svg"><img src="assets/interest-shield-light.svg" alt="Cybersecurity" width="100%"></picture>
 
-## Certifications
-
-<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-oci-architect-dark.svg"><img src="assets/cert-oci-architect-light.svg" alt="Oracle Cloud Infrastructure Certified Architect Associate" width="100%"></picture></a>
-
-<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-oci-ai-dark.svg"><img src="assets/cert-oci-ai-light.svg" alt="Oracle Cloud Infrastructure Certified AI Foundations Associate" width="100%"></picture></a>
-
-<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-gcp-dark.svg"><img src="assets/cert-gcp-light.svg" alt="Google Cloud Computing Foundations Certificate" width="100%"></picture></a>
-
-<a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-aws-dark.svg"><img src="assets/cert-aws-light.svg" alt="Advanced Generative AI Implementation on AWS" width="100%"></picture></a>
-
-## Activity
-
-Pulled from the GitHub API and refreshed every day.
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202610221108" alt="Contribution totals and streaks" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202610221108" alt="Contribution calendar for the last year" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202610221108" alt="Contributions per month over the last year" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202610221108" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202610221108" alt="My most active repositories in the last 12 months" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202610221108" alt="Top languages across public repositories" width="100%"></picture>
+</details>
 
 ## Contact
 

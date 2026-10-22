@@ -163,7 +163,7 @@ def chip_svg(slug, theme, label=None):
 
 
 LABELS = {"java": "Java", "gnubash": "Bash", "nodedotjs": "Node.js", "reactquery": "TanStack Query",
-          "oracle": "Oracle Cloud", "aws": "AWS", "groq": "Groq", "meta": "Llama 3.3", "cohere": "Cohere"}
+          "oracle": "Oracle Cloud", "aws": "AWS", "groq": "Groq", "meta": "Llama 3.3", "cohere": "Cohere Rerank"}
 USED_CHIPS = set()
 
 
@@ -201,12 +201,13 @@ PROJECTS = [
     ),
     dict(
         name="rag", accent="#1F9E98", kicker="AI  ·  RETRIEVAL", title="RAG Research Engine",
-        tagline="Answers grounded only in the documents you upload.",
-        status="Open source", visual=v_rag, url=f"https://github.com/{USER}/RAG-Research-Engine",
-        desc="Upload documents, ask in any language and get answers based only on what you uploaded. When the context "
-        "doesn't hold the answer, it says so instead of making one up. Retrieval favors more recent files, the context is "
-        "capped at 4,000 tokens, and every answer shows the passages it came from.",
-        tools=["python", "fastapi", "postgresql", "sqlalchemy", "cohere", "groq", "meta", "docker"],
+        tagline="Answers from your documents, with sources, and no answer when the evidence is missing.",
+        status="Benchmarked in CI", visual=v_rag, url=f"https://github.com/{USER}/RAG-Research-Engine",
+        desc="Upload PDFs and notes, ask in English or Spanish, and get answers that cite the exact passages they use. "
+        "Retrieval fuses pgvector and Postgres full-text search with Reciprocal Rank Fusion, an optional Cohere reranker "
+        "reorders the results, and a calibrated gate refuses before the model is called when the documents don't hold the "
+        "answer. A benchmark runs on every pull request and fails if quality drops.",
+        tools=["python", "fastapi", "postgresql", "sqlalchemy", "angular", "cohere", "groq", "docker", "pytest"],
         buttons=[("source-rag", "Source code", f"https://github.com/{USER}/RAG-Research-Engine")],
     ),
 ]
@@ -382,7 +383,7 @@ def cert(c, theme):
 # --------------------------------------------------------------------------- toolbox
 TOOLBOX = [
     ("Languages", ["typescript", "javascript", "python", "java", "gnubash", "sql"]),
-    ("Frontend & mobile", ["react", "reactnative", "expo", "vite", "tailwindcss", "reactquery", "zod"]),
+    ("Frontend & mobile", ["react", "reactnative", "expo", "angular", "vite", "tailwindcss", "reactquery", "zod"]),
     ("Backend", ["nestjs", "nodedotjs", "fastapi", "springboot", "graphql", "prisma", "typeorm", "sqlalchemy", "pydantic"]),
     ("Data & AI", ["tensorflow", "keras", "tflite", "numpy", "pandas", "scikitlearn", "googlegemini", "kaggle"]),
     ("Databases", ["postgresql", "mariadb", "sqlite", "neon", "firebase"]),
@@ -435,18 +436,6 @@ def readme():
         md.append("")
         md.append("<br>")
     md.append("")
-    md.append("## Toolbox")
-    md.append("")
-    for cat, slugs in TOOLBOX:
-        md.append(f"**{cat}**")
-        md.append("")
-        md.append(chips_md(slugs))
-        md.append("")
-    md.append("## Where I'm heading")
-    md.append("")
-    for slug, *_ in INTERESTS:
-        md.append(pic(f"interest-{slug}", INTERESTS[[i[0] for i in INTERESTS].index(slug)][2], width="100%"))
-        md.append("")
     md.append("## Certifications")
     md.append("")
     for c in CERTS:
@@ -456,13 +445,48 @@ def readme():
     md.append("")
     md.append("Pulled from the GitHub API and refreshed every day.")
     md.append("")
-    for name, alt in (("activity-stats", "Contribution totals and streaks"), ("activity-calendar", "Contribution calendar for the last year"),
-                      ("activity-months", "Contributions per month over the last year"),
-                      ("activity-breakdown", "Commits, pull requests, reviews and issues in the last 12 months"),
-                      ("activity-repos", "My most active repositories in the last 12 months"),
-                      ("activity-languages", "Top languages across public repositories")):
+    activity = [
+        ("activity-stats", "Contribution totals and streaks"),
+        ("activity-calendar", "Contribution calendar for the last year"),
+        ("activity-months", "Contributions per month over the last year"),
+        ("activity-breakdown", "Commits, pull requests, reviews and issues in the last 12 months"),
+        ("activity-repos", "My most active repositories in the last 12 months"),
+        ("activity-languages", "Top languages across public repositories"),
+    ]
+    for i, (name, alt) in enumerate(activity):
+        if i == 3:
+            md.append("<details>")
+            md.append("<summary><b>More activity: breakdown, most active repositories and languages</b></summary>")
+            md.append("<br>")
+            md.append("")
         md.append(pic(name, alt, width="100%", base=RAW).replace(".svg", f".svg?v={STAMP}"))
         md.append("")
+    md.append("</details>")
+    md.append("")
+    md.append("## Toolbox")
+    md.append("")
+    md.append("<details>")
+    md.append("<summary><b>Languages, frameworks, data, cloud and tooling I work with</b></summary>")
+    md.append("<br>")
+    md.append("")
+    for cat, slugs in TOOLBOX:
+        md.append(f"**{cat}**")
+        md.append("")
+        md.append(chips_md(slugs))
+        md.append("")
+    md.append("</details>")
+    md.append("")
+    md.append("## Where I'm heading")
+    md.append("")
+    md.append("<details>")
+    md.append("<summary><b>AWS, Databricks and cybersecurity</b></summary>")
+    md.append("<br>")
+    md.append("")
+    for slug, *_ in INTERESTS:
+        md.append(pic(f"interest-{slug}", INTERESTS[[i[0] for i in INTERESTS].index(slug)][2], width="100%"))
+        md.append("")
+    md.append("</details>")
+    md.append("")
     md.append("## Contact")
     md.append("")
     md.append(f'<a href="mailto:{EMAIL}">{pic("contact", "Let\'s talk. Based in Costa Rica", width="100%")}</a>')
