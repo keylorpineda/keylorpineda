@@ -195,7 +195,7 @@ Pulled from the GitHub API and refreshed every day.
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg" alt="Repositories with the most commits in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg" alt="My most active repositories in the last 12 months" width="100%"></picture>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg" alt="Top languages across public repositories" width="100%"></picture>
 

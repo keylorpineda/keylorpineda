@@ -458,7 +458,7 @@ def readme():
     for name, alt in (("activity-stats", "Contribution totals and streaks"), ("activity-calendar", "Contribution calendar for the last year"),
                       ("activity-months", "Contributions per month over the last year"),
                       ("activity-breakdown", "Commits, pull requests, reviews and issues in the last 12 months"),
-                      ("activity-repos", "Repositories with the most commits in the last 12 months"),
+                      ("activity-repos", "My most active repositories in the last 12 months"),
                       ("activity-languages", "Top languages across public repositories")):
         md.append(pic(name, alt, width="100%", base=RAW))
         md.append("")

@@ -47,7 +47,7 @@ query($login: String!, $from: DateTime!, $to: DateTime!) {
       totalRepositoryContributions
       restrictedContributionsCount
       commitContributionsByRepository(maxRepositories: 10) {
-        repository { name isPrivate primaryLanguage { name color } }
+        repository { name isPrivate owner { login } primaryLanguage { name color } }
         contributions { totalCount }
       }
       contributionCalendar {
@@ -144,7 +144,7 @@ def mock():
         totalIssueContributions=58, totalRepositoryContributions=9, restrictedContributionsCount=0,
         contributionCalendar={"totalContributions": total, "weeks": weeks},
         commitContributionsByRepository=[
-            {"repository": {"name": n, "isPrivate": False, "primaryLanguage": {"name": l, "color": c}}, "contributions": {"totalCount": v}}
+            {"repository": {"name": n, "isPrivate": False, "owner": {"login": LOGIN}, "primaryLanguage": {"name": l, "color": c}}, "contributions": {"totalCount": v}}
             for n, l, c, v in (("healthycropping", "TypeScript", "#3178c6", 612), ("booth", "TypeScript", "#3178c6", 388),
                                ("PokeScript", "TypeScript", "#3178c6", 120), ("RAG-Research-Engine", "Python", "#3572A5", 64),
                                ("HealthyHabits-API", "Java", "#b07219", 31))
@@ -399,14 +399,10 @@ def months_card(s, th):
     b.append(text("CONTRIBUTIONS PER MONTH", 15, 36, 54, th["muted"], "semibold", tracking=2.2))
     name = dt.date(*months[-1], 1).strftime("%B")
     pname = dt.date(*months[-2], 1).strftime("%B")
-    if prev:
-        delta = (cur - prev) / prev * 100
-        trend = f"{'up' if delta >= 0 else 'down'} {abs(delta):.0f}% from {pname}"
-    else:
-        trend = f"nothing in {pname}"
+    trend = f"{prev:,} in {pname}"
     head = f"{cur:,} in {name} so far"
     b.append(text(head, 22, 36, 92, th["text"], "semibold"))
-    b.append(text(trend, 16, 36 + tw(head, 22, "semibold") + 14, 92, th["accent"] if (not prev or cur >= prev) else th["muted"], "medium"))
+    b.append(text(trend, 16, 36 + tw(head, 22, "semibold") + 14, 92, th["muted"], "medium"))
     px0, px1, base, top = 40, W - 40, H - 62, 136
     slot = (px1 - px0) / 12
     cw = slot * 0.56
@@ -446,11 +442,16 @@ def months_card(s, th):
 
 def repos_card(s, th):
     W = 1000
-    repos = [r for r in s["year"].get("commitContributionsByRepository", []) if not r["repository"]["isPrivate"]][:6]
+    repos = [
+        r for r in s["year"].get("commitContributionsByRepository", [])
+        if not r["repository"]["isPrivate"]
+        and r["repository"]["owner"]["login"].lower() == LOGIN.lower()
+        and r["repository"]["name"].lower() != LOGIN.lower()
+    ][:6]
     rows = len(repos)
     H = 104 + max(rows, 1) * 52
     b = [card(W, H, th)]
-    b.append(text("MOST COMMITS BY REPOSITORY  ·  LAST 12 MONTHS", 15, 36, 54, th["muted"], "semibold", tracking=2.2))
+    b.append(text("MY MOST ACTIVE REPOSITORIES  ·  LAST 12 MONTHS", 15, 36, 54, th["muted"], "semibold", tracking=2.2))
     b.append('<linearGradient id="sh" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
              '<stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>')
     mx = max((r["contributions"]["totalCount"] for r in repos), default=1) or 1
