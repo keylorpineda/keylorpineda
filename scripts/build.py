@@ -16,6 +16,7 @@ ASSETS = ROOT / "assets"
 USER = "keylorpineda"
 EMAIL = "keylorpineda729@gmail.com"
 LINKEDIN = "https://www.linkedin.com/in/keylor-pineda"
+SITE = "https://keylorpineda.dev"
 RAW = f"https://raw.githubusercontent.com/{USER}/{USER}/output"
 STAMP = __import__("datetime").datetime.now(__import__("datetime").UTC).strftime("%Y%m%d%H%M")
 REDUCED = "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
@@ -120,6 +121,11 @@ def g_linkedin(th, x, y):
     return (f'<g transform="translate({x} {y}) scale(.9167)"><rect width="24" height="24" rx="5" fill="#0A66C2"/>'
             '<rect x="5" y="9.5" width="3.2" height="9.5" fill="#fff"/><circle cx="6.6" cy="6.2" r="1.9" fill="#fff"/>'
             '<path d="M10.6 9.5h3.1v1.4c.5-.9 1.6-1.7 3.2-1.7 3 0 3.6 1.9 3.6 4.5V19h-3.2v-4.6c0-1.2 0-2.6-1.6-2.6s-1.9 1.2-1.9 2.5V19h-3.2z" fill="#fff"/></g>')
+
+
+def g_globe(th, x, y):
+    return (f'<g transform="translate({x} {y})" fill="none" stroke="{th["accent"]}" stroke-width="1.9" stroke-linecap="round">'
+            '<circle cx="11" cy="11" r="9.5"/><path d="M1.5 11h19M11 1.5c3 3.2 3 15.8 0 19M11 1.5c-3 3.2-3 15.8 0 19"/></g>')
 
 
 def g_github(th, x, y):
@@ -244,6 +250,7 @@ def g_pin(th, x, y):
 
 
 CHANNELS = [
+    ("portfolio", g_globe, "PORTFOLIO", "keylorpineda.dev", SITE),
     ("email", g_mail, "EMAIL", EMAIL, f"mailto:{EMAIL}"),
     ("linkedin", g_linkedin, "LINKEDIN", "in/keylor-pineda", LINKEDIN),
     ("github", g_github, "GITHUB", f"@{USER}", f"https://github.com/{USER}"),
@@ -266,7 +273,7 @@ def contact(theme):
     b.append(text(pill, 16, W - 48 - pw + 48, 83.5, th["text"], "medium"))
     write("contact", theme, svg_doc(W, H, "".join(b), "Let's talk. Based in Costa Rica, UTC-6"))
     for name, glyph, lab, val, _ in CHANNELS:
-        tw_, th_ = 268, 112
+        tw_, th_ = 400, 112
         t = [f'<rect x="4" y="4" width="{tw_ - 8}" height="{th_ - 8}" rx="20" fill="{th["card"]}" stroke="{th["border"]}"/>']
         t.append(f'<rect x="22" y="22" width="40" height="40" rx="12" fill="{th["card2"]}" stroke="{th["border"]}"/>')
         t.append(glyph(th, 31, 31))
@@ -400,7 +407,7 @@ def readme():
     md.append('<p align="center">')
     md.append(f'  <a href="mailto:{EMAIL}">{pic("btn-email", f"Email {EMAIL}", height=46)}</a>')
     md.append(f'  <a href="{LINKEDIN}">{pic("btn-linkedin", "LinkedIn", height=46)}</a>')
-    md.append(f'  <a href="https://github.com/{USER}?tab=repositories">{pic("btn-repos", "Repositories", height=46)}</a>')
+    md.append(f'  <a href="{SITE}">{pic("btn-site", "Portfolio: keylorpineda.dev", height=46)}</a>')
     md.append("</p>")
     md.append("")
     md.append("## About me")
@@ -493,7 +500,7 @@ def readme():
     md.append("")
     md.append('<p align="center">')
     for name, _, lab, val, url in CHANNELS:
-        md.append(f'  <a href="{url}">{pic("contact-" + name, f"{lab.title()}: {val}", width=268)}</a>')
+        md.append(f'  <a href="{url}">{pic("contact-" + name, f"{lab.title()}: {val}", width=400)}</a>')
     md.append("</p>")
     md.append("")
     md.append('<p align="center"><sub>Thanks for stopping by.</sub></p>')
@@ -517,7 +524,7 @@ def main():
             cert(c, theme)
         button("email", theme, EMAIL, g_mail)
         button("linkedin", theme, "LinkedIn", g_linkedin)
-        button("repos", theme, "All repositories", g_github)
+        button("site", theme, "keylorpineda.dev", g_globe, primary=True)
         contact(theme)
         button("demo", theme, "Live demo", g_arrow, primary=True)
         button("source", theme, "Source code", g_github)
