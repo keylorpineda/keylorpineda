@@ -10,7 +10,7 @@
 
 I'm Keylor, a software developer from Costa Rica. I like building complete products: the database, the API, the interface, and the tests and CI that keep everything working.
 
-Right now most of my time goes into **HealthyCropping**, an Android app that recognizes coffee diseases from a photo without an internet connection. Before that I built **Booth**, a catalog and ordering tool for small shops that sell through WhatsApp, and a **RAG engine** that answers questions using only the documents you give it.
+Right now most of my time goes into **HealthyCropping**, an Android app that recognizes coffee, cacao and banana diseases from a photo without an internet connection. Before that I built **Booth**, a catalog and ordering tool for small shops that sell through WhatsApp, and a **RAG engine** that answers questions using only the documents you give it.
 
 Outside of the code I'm studying cloud and security, which is where the certifications below come from.
 
@@ -20,7 +20,7 @@ Outside of the code I'm studying cloud and security, which is where the certific
 
 <a href="https://github.com/keylorpineda/healthycropping"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-healthycropping-dark.svg"><img src="assets/project-healthycropping-light.svg" alt="HealthyCropping: Crop disease detection that works in the field, with no signal." width="100%"></picture></a>
 
-Point a phone at a coffee leaf and get a diagnosis right there in the plot. A MobileNetV3 model trained on public coffee datasets runs on the device through TensorFlow Lite, and scans, farms and plots are stored locally first. Cacao and banana models come next, along with a Gemini RAG layer that explains what to do and cites official agronomy manuals.
+Point a phone at a coffee leaf, a cacao pod or a banana leaf and get a diagnosis right there in the plot. Each crop has its own MobileNetV3 model running on the device through TensorFlow Lite, and scans, farms and plots are stored locally first. Next up: sync and a Gemini RAG layer that explains what to do and cites official agronomy manuals.
 
 <p>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/reactnative-dark.svg"><img src="assets/chips/reactnative-light.svg" alt="React Native" height="36"></picture>
@@ -187,17 +187,17 @@ Upload documents, ask in any language and get answers based only on what you upl
 
 Pulled from the GitHub API and refreshed every day.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202610221023"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202610221023" alt="Contribution totals and streaks" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202610221108" alt="Contribution totals and streaks" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202610221023"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202610221023" alt="Contribution calendar for the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202610221108" alt="Contribution calendar for the last year" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202610221023"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202610221023" alt="Contributions per month over the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202610221108" alt="Contributions per month over the last year" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202610221023"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202610221023" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202610221108" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202610221023"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202610221023" alt="My most active repositories in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202610221108" alt="My most active repositories in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202610221023"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202610221023" alt="Top languages across public repositories" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202610221108"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202610221108" alt="Top languages across public repositories" width="100%"></picture>
 
 ## Contact
 

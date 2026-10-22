@@ -17,6 +17,7 @@ USER = "keylorpineda"
 EMAIL = "keylorpineda729@gmail.com"
 LINKEDIN = "https://www.linkedin.com/in/keylor-pineda"
 RAW = f"https://raw.githubusercontent.com/{USER}/{USER}/output"
+STAMP = __import__("datetime").datetime.now(__import__("datetime").UTC).strftime("%Y%m%d%H%M")
 REDUCED = "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
 THEME_NAMES = ("dark", "light")
 
@@ -180,10 +181,10 @@ PROJECTS = [
         name="healthycropping", accent="#3FA163", kicker="ANDROID  ·  ON-DEVICE ML", title="HealthyCropping",
         tagline="Crop disease detection that works in the field, with no signal.",
         status="In development", visual=v_healthy, url=f"https://github.com/{USER}/healthycropping",
-        desc="Point a phone at a coffee leaf and get a diagnosis right there in the plot. A MobileNetV3 model trained on "
-        "public coffee datasets runs on the device through TensorFlow Lite, and scans, farms and plots are stored locally "
-        "first. Cacao and banana models come next, along with a Gemini RAG layer that explains what to do and cites "
-        "official agronomy manuals.",
+        desc="Point a phone at a coffee leaf, a cacao pod or a banana leaf and get a diagnosis right there in the plot. "
+        "Each crop has its own MobileNetV3 model running on the device through TensorFlow Lite, and scans, farms and plots "
+        "are stored locally first. Next up: sync and a Gemini RAG layer that explains what to do and cites official "
+        "agronomy manuals.",
         tools=["reactnative", "expo", "typescript", "tflite", "python", "fastapi", "firebase", "sqlite", "googlegemini"],
         buttons=[("source-hc", "Source code", f"https://github.com/{USER}/healthycropping")],
     ),
@@ -406,7 +407,7 @@ def readme():
     md.append("I'm Keylor, a software developer from Costa Rica. I like building complete products: the database, the API, "
               "the interface, and the tests and CI that keep everything working.")
     md.append("")
-    md.append("Right now most of my time goes into **HealthyCropping**, an Android app that recognizes coffee diseases from "
+    md.append("Right now most of my time goes into **HealthyCropping**, an Android app that recognizes coffee, cacao and banana diseases from "
               "a photo without an internet connection. Before that I built **Booth**, a catalog and ordering tool for small "
               "shops that sell through WhatsApp, and a **RAG engine** that answers questions using only the documents you give it.")
     md.append("")
@@ -460,7 +461,7 @@ def readme():
                       ("activity-breakdown", "Commits, pull requests, reviews and issues in the last 12 months"),
                       ("activity-repos", "My most active repositories in the last 12 months"),
                       ("activity-languages", "Top languages across public repositories")):
-        md.append(pic(name, alt, width="100%", base=RAW))
+        md.append(pic(name, alt, width="100%", base=RAW).replace(".svg", f".svg?v={STAMP}"))
         md.append("")
     md.append("## Contact")
     md.append("")
