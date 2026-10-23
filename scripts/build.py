@@ -208,13 +208,15 @@ PROJECTS = [
     dict(
         name="rag", accent="#1F9E98", kicker="AI  ·  RETRIEVAL", title="RAG Research Engine",
         tagline="Answers from your documents, with sources, and no answer when the evidence is missing.",
-        status="Benchmarked in CI", visual=v_rag, url=f"https://github.com/{USER}/RAG-Research-Engine",
+        status="Live demo  ·  benchmarked in CI", visual=v_rag, url=f"https://github.com/{USER}/RAG-Research-Engine",
         desc="Upload PDFs and notes, ask in English or Spanish, and get answers that cite the exact passages they use. "
         "Retrieval fuses pgvector and Postgres full-text search with Reciprocal Rank Fusion, an optional Cohere reranker "
         "reorders the results, and a calibrated gate refuses before the model is called when the documents don't hold the "
-        "answer. A benchmark runs on every pull request and fails if quality drops.",
-        tools=["python", "fastapi", "postgresql", "sqlalchemy", "angular", "cohere", "groq", "docker", "pytest"],
-        buttons=[("source-rag", "Source code", f"https://github.com/{USER}/RAG-Research-Engine")],
+        "answer. An Angular web app shows each answer next to its sources, and a benchmark runs on every pull request and "
+        "fails if quality drops.",
+        tools=["python", "fastapi", "postgresql", "sqlalchemy", "angular", "cohere", "groq", "docker", "pytest", "vercel", "render", "neon"],
+        buttons=[("demo-rag", "Live demo", "https://research-engine-omega.vercel.app"),
+                 ("source-rag", "Source code", f"https://github.com/{USER}/RAG-Research-Engine")],
     ),
 ]
 
