@@ -70,7 +70,7 @@ Small businesses already sell through WhatsApp, one chat at a time. Booth gives 
 
 <a href="https://github.com/keylorpineda/RAG-Research-Engine"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-rag-dark.svg"><img src="assets/project-rag-light.svg" alt="RAG Research Engine: Answers from your documents, with sources, and no answer when the evidence is missing." width="100%"></picture></a>
 
-Upload PDFs and notes, ask in English or Spanish, and get answers that cite the exact passages they use. Retrieval fuses pgvector and Postgres full-text search with Reciprocal Rank Fusion, an optional Cohere reranker reorders the results, and a calibrated gate refuses before the model is called when the documents don't hold the answer. A benchmark runs on every pull request and fails if quality drops.
+Upload PDFs and notes, ask in English or Spanish, and get answers that cite the exact passages they use. Retrieval fuses pgvector and Postgres full-text search with Reciprocal Rank Fusion, an optional Cohere reranker reorders the results, and a calibrated gate refuses before the model is called when the documents don't hold the answer. An Angular web app shows each answer next to its sources, and a benchmark runs on every pull request and fails if quality drops.
 
 <p>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/python-dark.svg"><img src="assets/chips/python-light.svg" alt="Python" height="36"></picture>
@@ -82,9 +82,13 @@ Upload PDFs and notes, ask in English or Spanish, and get answers that cite the 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/groq-dark.svg"><img src="assets/chips/groq-light.svg" alt="Groq" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/docker-dark.svg"><img src="assets/chips/docker-light.svg" alt="Docker" height="36"></picture>
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/pytest-dark.svg"><img src="assets/chips/pytest-light.svg" alt="Pytest" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/vercel-dark.svg"><img src="assets/chips/vercel-light.svg" alt="Vercel" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/render-dark.svg"><img src="assets/chips/render-light.svg" alt="Render" height="36"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/chips/neon-dark.svg"><img src="assets/chips/neon-light.svg" alt="Neon" height="36"></picture>
 </p>
 
 <p>
+<a href="https://research-engine-omega.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-demo-dark.svg"><img src="assets/btn-demo-light.svg" alt="Live demo" height="46"></picture></a>
 <a href="https://github.com/keylorpineda/RAG-Research-Engine"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-source-dark.svg"><img src="assets/btn-source-light.svg" alt="Source code" height="46"></picture></a>
 </p>
 
