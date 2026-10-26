@@ -108,21 +108,21 @@ Upload PDFs and notes, ask in English or Spanish, and get answers that cite the 
 
 Pulled from the GitHub API and refreshed every day.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202610251121"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202610251121" alt="Contribution totals and streaks" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202610261255"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202610261255" alt="Contribution totals and streaks" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202610251121"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202610251121" alt="Contribution calendar for the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202610261255"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202610261255" alt="Contribution calendar for the last year" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202610251121"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202610251121" alt="Contributions per month over the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202610261255"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202610261255" alt="Contributions per month over the last year" width="100%"></picture>
 
 <details>
 <summary><b>More activity: breakdown, most active repositories and languages</b></summary>
 <br>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202610251121"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202610251121" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202610261255"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202610261255" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202610251121"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202610251121" alt="My most active repositories in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202610261255"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202610261255" alt="My most active repositories in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202610251121"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202610251121" alt="Top languages across public repositories" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202610261255"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202610261255" alt="Top languages across public repositories" width="100%"></picture>
 
 </details>
 
