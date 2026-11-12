@@ -426,7 +426,8 @@ def months_card(s, th):
                       "middle", extra=f'class="val" style="animation-delay:{.9 + i*.07:.2f}s"'))
         b.append(text(dt.date(yy, mm, 1).strftime("%b"), 14, cx + cw / 2, base + 26, th["faint"], "medium", "middle"))
         pts.append((cx + cw / 2, base - h - 30 if v else base - 30))
-    b.append(text("Best month", 12.5, pts[best][0], top - 18 if (base - top) * vals[best] / mx > (base - top) - 20 else pts[best][1] - 2,
+    # The label sits a full line above the bar's own number, so the two never touch.
+    b.append(text("Best month", 12.5, pts[best][0], pts[best][1] - 4,
                   th["accent"], "semibold", "middle", extra='class="val" style="animation-delay:1.8s"'))
     style = (
         ".col{transform-box:fill-box;transform-origin:center bottom;animation:col 1s cubic-bezier(.2,.8,.25,1.15) backwards}"
