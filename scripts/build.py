@@ -24,7 +24,7 @@ THEME_NAMES = ("dark", "light")
 
 
 def write(name, theme, svg):
-    (ASSETS / f"{name}-{theme}.svg").write_text(svg)
+    (ASSETS / f"{name}-{theme}.svg").write_text(svg, encoding="utf-8", newline="\n")
 
 
 def pic(name, alt, width=None, height=None, base="assets"):
@@ -40,75 +40,183 @@ def frame(w, h, th, rx=22):
 
 
 # --------------------------------------------------------------------------- header
-K = ["X...X", "X..X.", "X.X..", "XX...", "X.X..", "X..X.", "X...X"]
-P = ["XXXX.", "X...X", "X...X", "XXXX.", "X....", "X....", "X...."]
+EASE = "cubic-bezier(.22,1,.36,1)"
+
+
+def letters(t, size, x, y, fill, cls, delay, step=0.045, tracking=0.0):
+    """Display text drawn one letter at a time, so each letter can animate on its own."""
+    out = []
+    for i, ch in enumerate(t):
+        if ch == " ":
+            continue
+        cx = x + (tw(t[:i], size, "display", tracking) + tracking if i else 0)
+        out.append(text(ch, size, cx, y, fill, "display", extra=f'class="{cls}" style="animation-delay:{delay + i * step:.3f}s"'))
+    return "".join(out), delay + len(t) * step
+
+
+def sun(th, cx, cy, r, gid="sun"):
+    """The low amber sun from the site, clipped by the card it sits in."""
+    return (
+        f'<radialGradient id="{gid}"><stop offset="0" stop-color="{th["fill"]}" stop-opacity=".62"/>'
+        f'<stop offset=".62" stop-color="{th["fill"]}" stop-opacity=".14"/><stop offset="1" stop-color="{th["fill"]}" stop-opacity="0"/></radialGradient>'
+        f'<circle class="sun" cx="{cx}" cy="{cy}" r="{r}" fill="url(#{gid})"/>'
+    )
+
+
+SUN_CSS = (
+    ".sun{transform-box:fill-box;transform-origin:center;animation:sun 9s ease-in-out infinite alternate}"
+    "@keyframes sun{from{transform:scale(.86)}to{transform:scale(1.08)}}"
+)
+
+
+def mini_window(th, tint, kind):
+    """A small app window, 280 x 186, centred on the origin."""
+    w, h = 280, 186
+    x, y = -w / 2, -h / 2
+    b = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" fill="{th["card2"]}" stroke="{th["border"]}"/>']
+    b.append(f'<path d="M{x} {y + 28}H{x + w}" stroke="{th["border"]}"/>')
+    for i, col in enumerate(("#FF5F57", "#FEBC2E", "#28C840")):
+        b.append(f'<circle cx="{x + 18 + i * 14}" cy="{y + 14}" r="4" fill="{col}"/>')
+    b.append(f'<rect x="{-46}" y="{y + 8}" width="92" height="12" rx="6" fill="{th["cell"]}"/>')
+    top = y + 40
+    if kind == "store":  # Booth: a cover, the shop's name and three products
+        b.append(f'<rect x="{x + 14}" y="{top}" width="{w - 28}" height="40" rx="8" fill="{tint}" opacity=".85"/>')
+        b.append(f'<rect x="{x + 14}" y="{top + 50}" width="110" height="9" rx="4.5" fill="{th["text"]}"/>')
+        b.append(f'<rect x="{x + 14}" y="{top + 66}" width="170" height="6" rx="3" fill="{th["faint"]}"/>')
+        for i in range(3):
+            b.append(f'<rect x="{x + 14 + i * 86}" y="{top + 84}" width="80" height="48" rx="8" fill="{th["cell"]}" stroke="{th["border"]}"/>')
+            b.append(f'<circle cx="{x + 82 + i * 86}" cy="{top + 120}" r="6" fill="{tint}"/>')
+    elif kind == "answer":  # Research Engine: a question, an answer with citations and its sources
+        b.append(f'<rect x="{x + 14}" y="{top}" width="{w - 28}" height="30" rx="8" fill="{th["cell"]}" stroke="{th["border"]}"/>')
+        b.append(f'<rect x="{x + 24}" y="{top + 11}" width="120" height="7" rx="3.5" fill="{th["muted"]}"/>')
+        b.append(f'<rect x="{x + w - 62}" y="{top + 6}" width="42" height="18" rx="6" fill="{tint}"/>')
+        for i, lw in enumerate((150, 132, 144, 96)):
+            b.append(f'<rect x="{x + 14}" y="{top + 44 + i * 14}" width="{lw}" height="6" rx="3" fill="{th["faint"] if i else th["text"]}"/>')
+        for i in range(3):
+            b.append(f'<rect x="{x + 180}" y="{top + 42 + i * 30}" width="86" height="24" rx="6" fill="{th["cell"]}" stroke="{th["border"]}"/>')
+            b.append(f'<rect x="{x + 188}" y="{top + 51 + i * 30}" width="{44 - i * 8}" height="5" rx="2.5" fill="{tint}"/>')
+        b.append(f'<rect x="{x + 14}" y="{top + 108}" width="150" height="5" rx="2.5" fill="{th["cell"]}"/>')
+        b.append(f'<rect x="{x + 14}" y="{top + 108}" width="92" height="5" rx="2.5" fill="{tint}"/>')
+    else:  # HealthyCropping: a leaf under the scanner and the result
+        b.append(f'<rect x="{x + 14}" y="{top}" width="112" height="{h - 54}" rx="10" fill="{th["cell"]}" stroke="{th["border"]}"/>')
+        b.append(f'<path transform="translate({x + 70} {top + 66}) rotate(-18) scale(.52)" d="M0 -88C52 -60 62 10 0 86C-62 10 -52 -60 0 -88Z" fill="{tint}"/>')
+        b.append(f'<circle cx="{x + 78}" cy="{top + 58}" r="5" fill="#E0962E"/><circle cx="{x + 62}" cy="{top + 80}" r="3.5" fill="#E0962E"/>')
+        b.append(f'<rect x="{x + 140}" y="{top + 4}" width="96" height="9" rx="4.5" fill="{th["text"]}"/>')
+        for i, lw in enumerate((120, 104, 112)):
+            b.append(f'<rect x="{x + 140}" y="{top + 26 + i * 14}" width="{lw}" height="6" rx="3" fill="{th["faint"]}"/>')
+        b.append(f'<rect x="{x + 140}" y="{top + 80}" width="126" height="34" rx="9" fill="{th["card"]}" stroke="{th["border"]}"/>')
+        b.append(f'<rect x="{x + 150}" y="{top + 94}" width="106" height="6" rx="3" fill="{th["cell"]}"/>')
+        b.append(f'<rect x="{x + 150}" y="{top + 94}" width="66" height="6" rx="3" fill="{tint}"/>')
+    return "".join(b)
 
 
 def header(theme):
     th = THEMES[theme]
-    W, H = 1000, 470
-    b = [frame(W, H, th, 26)]
-    b.append(text("SOFTWARE DEVELOPER", 15, 56, 84, th["accent"], "semibold", tracking=2.6))
-    x2 = 56 + tw("SOFTWARE DEVELOPER", 15, "semibold", 2.6) + 16
-    b.append(f'<circle cx="{fmt(x2)}" cy="79" r="2.5" fill="{th["faint"]}"/>')
-    b.append(text("COSTA RICA", 15, x2 + 16, 84, th["muted"], "semibold", tracking=2.6))
-    b.append(text("Keylor", 96, 50, 182, th["text"], "display", tracking=-2.6))
-    b.append(text("Pineda", 96, 50, 274, th["text"], "display", tracking=-2.6))
-    p, _ = paragraph("I build full-stack products and machine learning that runs right on a phone.",
-                     22, 56, 330, 470, th["muted"], leading=1.5)
-    b.append(p)
-    label = "Now building HealthyCropping"
-    pw = tw(label, 17, "medium") + 62
-    b.append(f'<rect x="56" y="388" width="{fmt(pw)}" height="44" rx="22" fill="{th["card2"]}" stroke="{th["border"]}"/>')
-    b.append(f'<circle class="halo" cx="82" cy="410" r="10" fill="#3FA163" opacity=".25"/>')
-    b.append('<circle cx="82" cy="410" r="5" fill="#3FA163"/>')
-    b.append(text("Now building", 17, 102, 416, th["muted"], "medium"))
-    b.append(text("HealthyCropping", 17, 102 + tw("Now building ", 17, "medium"), 416, th["text"], "medium"))
+    W, H = 1000, 500
+    b = [f'<clipPath id="card"><rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="26"/></clipPath>', frame(W, H, th, 26)]
+    b.append(f'<g clip-path="url(#card)">{sun(th, 745, 610, 340)}</g>')
 
-    # KP monogram drawn as a contribution grid. The letters are "written" cell by cell
-    # in stroke order, glow, catch a light sweep, then fade out and start again.
-    R = rng(11)
-    rows, cols, step, cell = 9, 13, 31, 25
-    gx = W - 52 - (cols * step - (step - cell))
-    gy = (H - (rows * step - (step - cell))) / 2
-    k_order = [(r, 0) for r in range(7)] + [(3, 1), (2, 2), (1, 3), (0, 4), (4, 2), (5, 3), (6, 4)]
-    p_order = [(r, 0) for r in range(7)] + [(0, 1), (0, 2), (0, 3), (1, 4), (2, 4), (3, 3), (3, 2), (3, 1)]
-    order = {}
-    for i, (r, c) in enumerate(k_order):
-        order[(r + 1, c + 1)] = i * 0.075
-    for i, (r, c) in enumerate(p_order):
-        order[(r + 1, c + 7)] = len(k_order) * 0.075 + 0.3 + i * 0.075
-    base, lit_cells, glow, twinkle, shine = [], [], [], [], []
-    for c in range(cols):
-        for r in range(rows):
-            x, y = gx + c * step, gy + r * step
-            rect = f'x="{fmt(x)}" y="{fmt(y)}" width="{cell}" height="{cell}" rx="6"'
-            base.append(f'<rect {rect} fill="{th["cell"]}"/>')
-            if (r, c) in order:
-                d = order[(r, c)]
-                lit_cells.append(f'<rect class="k" style="animation-delay:{d:.3f}s" {rect} fill="{th["accent"]}"/>')
-                glow.append(f'<rect {rect} fill="{th["accent"]}"/>')
-                shine.append(f'<rect class="s" style="animation-delay:{3.4 + c * 0.06 + r * 0.03:.2f}s" {rect} fill="#FFFFFF" opacity="0"/>')
-            elif R.random() < 0.3:
-                twinkle.append(f'<rect class="t" style="animation-duration:{R.uniform(4, 9):.1f}s;animation-delay:{R.uniform(0, 6):.1f}s" {rect} fill="{th["accent"]}" opacity="0"/>')
-    b.append(f'<filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>')
-    b += base + twinkle
-    b.append(f'<g class="g" filter="url(#glow)" opacity="0">{"".join(glow)}</g>')
-    b += lit_cells + shine
-    style = (
-        ".k{transform-box:fill-box;transform-origin:center;animation:draw 12s cubic-bezier(.2,.7,.3,1) infinite backwards}"
-        "@keyframes draw{0%{opacity:0;transform:scale(.2)}2.2%{opacity:1;transform:scale(1.18)}3.8%{opacity:1;transform:scale(1)}"
-        "84%{opacity:1;transform:scale(1)}88%,100%{opacity:0;transform:scale(.5)}}"
-        ".g{animation:glow 12s ease-in-out infinite}"
-        "@keyframes glow{0%,22%{opacity:0}34%{opacity:.55}55%{opacity:.25}72%{opacity:.45}86%,100%{opacity:0}}"
-        ".s{animation:shine 12s ease-out infinite backwards}"
-        "@keyframes shine{0%{opacity:0}2%{opacity:.5}7%,100%{opacity:0}}"
-        ".t{animation:tw 6s ease-in-out infinite}"
-        "@keyframes tw{0%,100%{opacity:0}50%{opacity:.22}}"
-        ".halo{transform-box:fill-box;transform-origin:center;animation:halo 2.4s ease-out infinite}"
-        "@keyframes halo{0%{transform:scale(.6);opacity:.5}100%{transform:scale(2);opacity:0}}" + REDUCED
+    # The name, one letter at a time, then the role right under it.
+    size = 118
+    assert 52 + tw("Pineda.", size, "display", -3) < 520, "the name must stay clear of the windows"
+    l1, t = letters("Keylor", size, 52, 168, th["text"], "l", 0.15, tracking=-3)
+    l2, t = letters("Pineda.", size, 52, 276, th["accent_big"], "l", t + 0.05, tracking=-3)
+    b += [l1, l2]
+    b.append(text("Software developer", 35, 55, 338, th["text"], "display", tracking=-0.8, extra=f'class="up" style="animation-delay:{t + 0.1:.2f}s"'))
+    rx = 55 + tw("Software developer", 35, "display", -0.8) + 18
+    b.append(text("COSTA RICA", 13, rx, 336, th["faint"], "semibold", tracking=2.4, extra=f'class="up" style="animation-delay:{t + 0.2:.2f}s"'))
+
+    # The site, as the one filled thing in the card.
+    label = "keylorpineda.dev"
+    pw = tw(label, 19, "semibold") + 86
+    pill = (
+        f'<rect x="55" y="388" width="{fmt(pw)}" height="54" rx="14" fill="{th["fill"]}"/>'
+        + text(label, 19, 77, 421.5, th["on_fill"], "semibold")
+        + f'<g class="nudge" transform="translate({fmt(55 + pw - 42)} 404)" fill="none" stroke="{th["on_fill"]}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17L17 5M8 5h9v9"/></g>'
     )
-    write("header", theme, svg_doc(W, H, "".join(b), "Keylor Pineda, software developer from Costa Rica", style))
+    b.append(f'<g class="up" style="animation-delay:{t + 0.35:.2f}s">{pill}</g>')
+    b.append(text("Now building HealthyCropping", 15.5, 55 + pw + 22, 420.5, th["muted"], "medium", extra=f'class="up" style="animation-delay:{t + 0.45:.2f}s"'))
+
+    # Three projects as windows: they open like a hand of cards, then keep floating.
+    cx, cy = 742, 232
+    fan = [
+        ("leaf", "#17B877", -118, 18, -10, "fl", 0.9),
+        ("answer", "#1FA37F", 118, 18, 10, "fr", 1.0),
+        ("store", "#5B54F0", 0, -6, 0, "fc", 0.8),
+    ]
+    for kind, tint, dx, dy, rot, cls, delay in fan:
+        b.append(
+            f'<g transform="translate({cx + dx} {cy + dy}) rotate({rot})"><g class="float" style="animation-delay:{-delay * 3:.1f}s">'
+            f'<g class="{cls}" style="animation-delay:{delay:.2f}s">{mini_window(th, tint, kind)}</g></g></g>'
+        )
+
+    style = (
+        f".l,.up,.fl,.fr,.fc{{transform-box:fill-box;animation-duration:1.1s;animation-timing-function:{EASE};animation-fill-mode:backwards}}"
+        ".l{transform-origin:0 100%;animation-name:letter}"
+        "@keyframes letter{from{opacity:0;transform:translateY(46px) rotate(9deg)}}"
+        ".up{animation-name:up}"
+        "@keyframes up{from{opacity:0;transform:translateY(18px)}}"
+        ".fl,.fr,.fc{transform-origin:center;animation-duration:1.5s}"
+        ".fc{animation-name:fc}.fl{animation-name:fl}.fr{animation-name:fr}"
+        "@keyframes fc{from{opacity:0;transform:translateY(150px) scale(.7)}}"
+        "@keyframes fl{from{opacity:0;transform:translate(118px,150px) rotate(10deg) scale(.7)}}"
+        "@keyframes fr{from{opacity:0;transform:translate(-118px,150px) rotate(-10deg) scale(.7)}}"
+        ".float{animation:float 7s ease-in-out infinite alternate}"
+        "@keyframes float{from{transform:translateY(-5px)}to{transform:translateY(6px)}}"
+        ".nudge{animation:nudge 2.6s ease-in-out infinite}"
+        "@keyframes nudge{0%,100%{translate:0 0}50%{translate:3px -3px}}" + SUN_CSS + REDUCED
+    )
+    write("header", theme, svg_doc(W, H, "".join(b), "Keylor Pineda, software developer from Costa Rica. Portfolio: keylorpineda.dev", style))
+
+
+# --------------------------------------------------------------------------- site card
+def site(theme):
+    """The portfolio gets its own card, in solid amber, right under the header."""
+    th = THEMES[theme]
+    W, H = 1000, 190
+    ink = th["on_fill"]
+    b = [f'<clipPath id="card"><rect width="{W}" height="{H}" rx="26"/></clipPath>']
+    b.append(f'<rect width="{W}" height="{H}" rx="26" fill="{th["fill"]}"/>')
+    # A band of light crosses the card every few seconds.
+    b.append(f'<g clip-path="url(#card)"><rect class="sweep" x="-260" y="-40" width="170" height="{H + 80}" fill="#FFFFFF" opacity=".34" transform="skewX(-18)"/></g>')
+    b.append(text("THE FULL PORTFOLIO", 13.5, 50, 58, ink, "semibold", tracking=2.6))
+    b.append(text("keylorpineda.dev", 62, 47, 124, ink, "display", tracking=-1.8))
+    b.append(text("Scroll-driven scenes, live captures of every project, English and Spanish, light and dark.", 17, 50, 158, ink, "medium"))
+    b.append(f'<g class="go"><circle cx="{W - 96}" cy="{H / 2}" r="40" fill="{ink}"/>'
+             f'<g transform="translate({W - 109} {H / 2 - 13})" fill="none" stroke="{th["fill"]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21L21 5M9 5h12v12"/></g></g>')
+    style = (
+        ".sweep{animation:sweep 5.5s cubic-bezier(.4,0,.2,1) infinite}"
+        "@keyframes sweep{0%,35%{translate:0 0}75%,100%{translate:1500px 0}}"
+        ".go{transform-box:fill-box;transform-origin:center;animation:go 2.8s ease-in-out infinite}"
+        "@keyframes go{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}" + REDUCED
+    )
+    write("site", theme, svg_doc(W, H, "".join(b), "The full portfolio: keylorpineda.dev", style))
+
+
+# --------------------------------------------------------------------------- section titles
+SECTIONS = ["About me", "Selected work", "Certifications", "Activity", "Toolbox", "Where I'm heading", "Contact"]
+
+
+def section(i, theme):
+    """A numbered title with a rule that draws itself and a spark that keeps running along it."""
+    th = THEMES[theme]
+    W, H = 1000, 86
+    title = SECTIONS[i]
+    num = f"{i + 1:02d}"
+    b = [text(num, 14, 2, 30, th["accent"], "semibold", tracking=2.4)]
+    b.append(text(title, 44, 0, 74, th["text"], "display", tracking=-1.4, extra='class="t"'))
+    x0 = tw(title, 44, "display", -1.4) + 26
+    b.append(f'<rect class="rule" x="{fmt(x0)}" y="60" width="{fmt(W - x0)}" height="1.5" fill="{th["border"]}"/>')
+    b.append(f'<rect class="spark" x="{fmt(x0)}" y="58.500" width="46" height="4.500" rx="2.250" fill="{th["fill"]}" style="--run:{fmt(W - x0 - 46)}px"/>')
+    style = (
+        f".t{{transform-box:fill-box;animation:rise 1s {EASE} backwards}}"
+        "@keyframes rise{from{opacity:0;transform:translateY(22px)}}"
+        f".rule{{transform-box:fill-box;transform-origin:0 50%;animation:rule 1.4s {EASE} .2s backwards}}"
+        "@keyframes rule{from{transform:scaleX(0)}}"
+        ".spark{animation:spark 6s cubic-bezier(.5,0,.5,1) infinite}"
+        "@keyframes spark{0%{translate:0 0;opacity:0}8%{opacity:1}46%{opacity:1}54%,100%{translate:var(--run) 0;opacity:0}}" + REDUCED
+    )
+    write(f"section-{i + 1}", theme, svg_doc(W, H, "".join(b), title, style))
 
 
 # --------------------------------------------------------------------------- buttons
@@ -141,9 +249,9 @@ def button(name, theme, label, glyph, primary=False):
     th = THEMES[theme]
     H = 46
     W = tw(label, 15.5, "semibold") + 82  # noqa
-    fill = th["text"] if primary else th["card"]
-    fg = th["card"] if primary else th["text"]
-    tht = dict(th, accent=th["card"] if primary else th["accent"], text=fg)
+    fill = th["fill"] if primary else th["card"]
+    fg = th["on_fill"] if primary else th["text"]
+    tht = dict(th, accent=th["on_fill"] if primary else th["accent"], text=fg)
     body = (
         f'<rect x="1" y=".5" width="{fmt(W-2)}" height="{H-1}" rx="{(H-1)/2}" fill="{fill}" stroke="{fill if primary else th["border"]}"/>'
         + glyph(tht, 22, 12)
@@ -242,6 +350,8 @@ def banner(p, theme):
     b.append(f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" rx="18" fill="{th["card2"]}" stroke="{th["border"]}"/>')
     vis, style = p["visual"](th, acc, vx, vy, vw, vh)
     b.append(vis)
+    for i, col in enumerate(("#FF5F57", "#FEBC2E", "#28C840")):
+        b.append(f'<circle cx="{vx + 22 + i * 16}" cy="{vy + 20}" r="5" fill="{col}"/>')
     write(f"project-{p['name']}", theme, svg_doc(W, H, "".join(b), f"{p['title']}: {p['tagline']}", style + REDUCED))
 
 
@@ -261,19 +371,25 @@ CHANNELS = [
 
 def contact(theme):
     th = THEMES[theme]
-    W, H = 1000, 300
-    b = [frame(W, H, th, 26)]
-    b.append(text("CONTACT", 15, 48, 78, th["accent"], "semibold", tracking=2.6))
-    b.append(text("Let's talk", 52, 46, 140, th["text"], "display", tracking=-1.4))
+    W, H = 1000, 340
+    b = [f'<clipPath id="card"><rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="26"/></clipPath>', frame(W, H, th, 26)]
+    b.append(f'<g clip-path="url(#card)">{sun(th, 800, 430, 300)}</g>')
+    l1, t = letters("Let's build", 78, 48, 124, th["text"], "l", 0.1, tracking=-2)
+    l2, t = letters("something.", 78, 48, 202, th["accent_big"], "l", t + 0.05, tracking=-2)
+    b += [l1, l2]
     p, _ = paragraph("Have a project in mind, a question about something I built, or want to talk about cloud, "
-                     "data or security? Write me, I'd like to hear about it.", 21, 48, 190, 560, th["muted"], leading=1.55)
+                     "data or security? Write me, I'd like to hear about it.", 20, 50, 252, 560, th["muted"], leading=1.55)
     b.append(p)
     pill = "Costa Rica  ·  UTC−6"
     pw = tw(pill, 16, "medium") + 66
-    b.append(f'<rect x="{fmt(W - 48 - pw)}" y="56" width="{fmt(pw)}" height="44" rx="22" fill="{th["card2"]}" stroke="{th["border"]}"/>')
-    b.append(g_pin(th, W - 48 - pw + 18, 67))
-    b.append(text(pill, 16, W - 48 - pw + 48, 83.5, th["text"], "medium"))
-    write("contact", theme, svg_doc(W, H, "".join(b), "Let's talk. Based in Costa Rica, UTC-6"))
+    b.append(f'<rect x="{fmt(W - 48 - pw)}" y="48" width="{fmt(pw)}" height="44" rx="14" fill="{th["card2"]}" stroke="{th["border"]}"/>')
+    b.append(g_pin(th, W - 48 - pw + 18, 59))
+    b.append(text(pill, 16, W - 48 - pw + 48, 75.5, th["text"], "medium"))
+    style = (
+        f".l{{transform-box:fill-box;transform-origin:0 100%;animation:letter 1.1s {EASE} backwards}}"
+        "@keyframes letter{from{opacity:0;transform:translateY(40px) rotate(9deg)}}" + SUN_CSS + REDUCED
+    )
+    write("contact", theme, svg_doc(W, H, "".join(b), "Let's build something. Based in Costa Rica, UTC-6", style))
     for name, glyph, lab, val, _ in CHANNELS:
         tw_, th_ = 400, 112
         t = [f'<rect x="4" y="4" width="{tw_ - 8}" height="{th_ - 8}" rx="20" fill="{th["card"]}" stroke="{th["border"]}"/>']
@@ -305,9 +421,15 @@ def about(theme):
         y = 40 + i * rowh
         if i:
             b.append(f'<path d="M40 {y}H{W-40}" stroke="{th["border"]}"/>')
-        b.append(text(k.upper(), 14, 44, y + 38, th["accent"], "semibold", tracking=2))
-        b.append(text(v, 22, 250, y + 39, th["text"], "medium"))
-    write("about", theme, svg_doc(W, H, "".join(b), "At a glance: " + "; ".join(f"{k} {v}" for k, v in FACTS)))
+        # an amber marker walks down the rows, one at a time
+        b.append(f'<rect class="m" style="animation-delay:{i * 0.9:.1f}s" x="44" y="{y + 26}" width="9" height="13" rx="2" fill="{th["fill"]}"/>')
+        b.append(text(k.upper(), 14, 66, y + 38, th["accent"], "semibold", tracking=2))
+        b.append(text(v, 22, 262, y + 39, th["text"], "medium"))
+    style = (
+        f".m{{animation:mark {len(FACTS) * 0.9:.1f}s ease-in-out infinite}}"
+        "@keyframes mark{0%,100%{opacity:.28}8%,18%{opacity:1}30%{opacity:.28}}" + REDUCED
+    )
+    write("about", theme, svg_doc(W, H, "".join(b), "At a glance: " + "; ".join(f"{k} {v}" for k, v in FACTS), style))
 
 
 # --------------------------------------------------------------------------- interests
@@ -402,17 +524,23 @@ TOOLBOX = [
 
 
 # --------------------------------------------------------------------------- README
+def heading(i):
+    return pic(f"section-{i}", SECTIONS[i - 1], width="100%")
+
+
 def readme():
     md = []
-    md.append(pic("header", "Keylor Pineda, software developer from Costa Rica", width="100%"))
+    md.append(f'<a href="{SITE}">{pic("header", "Keylor Pineda, software developer from Costa Rica. Portfolio: keylorpineda.dev", width="100%")}</a>')
+    md.append("")
+    md.append(f'<a href="{SITE}">{pic("site", "The full portfolio: keylorpineda.dev", width="100%")}</a>')
     md.append("")
     md.append('<p align="center">')
+    md.append(f'  <a href="{SITE}">{pic("btn-site", "Portfolio: keylorpineda.dev", height=46)}</a>')
     md.append(f'  <a href="mailto:{EMAIL}">{pic("btn-email", f"Email {EMAIL}", height=46)}</a>')
     md.append(f'  <a href="{LINKEDIN}">{pic("btn-linkedin", "LinkedIn", height=46)}</a>')
-    md.append(f'  <a href="{SITE}">{pic("btn-site", "Portfolio: keylorpineda.dev", height=46)}</a>')
     md.append("</p>")
     md.append("")
-    md.append("## About me")
+    md.append(heading(1))
     md.append("")
     md.append("I'm Keylor, a software developer from Costa Rica. I like building complete products: the database, the API, "
               "the interface, and the tests and CI that keep everything working.")
@@ -423,9 +551,11 @@ def readme():
     md.append("")
     md.append("Outside of the code I'm studying cloud and security, which is where the certifications below come from.")
     md.append("")
+    md.append(f"Everything here, with live captures of each project, is at **[keylorpineda.dev]({SITE})**.")
+    md.append("")
     md.append(pic("about", "At a glance", width="100%"))
     md.append("")
-    md.append("## Selected work")
+    md.append(heading(2))
     for p in PROJECTS:
         md.append("")
         img = pic(f"project-{p['name']}", f"{p['title']}: {p['tagline']}", width="100%")
@@ -445,12 +575,12 @@ def readme():
         md.append("")
         md.append("<br>")
     md.append("")
-    md.append("## Certifications")
+    md.append(heading(3))
     md.append("")
     for c in CERTS:
         md.append(f'<a href="{LINKEDIN}/details/certifications/">{pic(c[0], c[2], width="100%")}</a>')
         md.append("")
-    md.append("## Activity")
+    md.append(heading(4))
     md.append("")
     md.append("Pulled from the GitHub API and refreshed every day.")
     md.append("")
@@ -472,7 +602,7 @@ def readme():
         md.append("")
     md.append("</details>")
     md.append("")
-    md.append("## Toolbox")
+    md.append(heading(5))
     md.append("")
     md.append("<details>")
     md.append("<summary><b>Languages, frameworks, data, cloud and tooling I work with</b></summary>")
@@ -485,29 +615,30 @@ def readme():
         md.append("")
     md.append("</details>")
     md.append("")
-    md.append("## Where I'm heading")
+    md.append(heading(6))
     md.append("")
     md.append("<details>")
     md.append("<summary><b>AWS, Databricks and cybersecurity</b></summary>")
     md.append("<br>")
     md.append("")
-    for slug, *_ in INTERESTS:
-        md.append(pic(f"interest-{slug}", INTERESTS[[i[0] for i in INTERESTS].index(slug)][2], width="100%"))
+    for slug, _, name, *_ in INTERESTS:
+        md.append(pic(f"interest-{slug}", name, width="100%"))
         md.append("")
     md.append("</details>")
     md.append("")
-    md.append("## Contact")
+    md.append(heading(7))
     md.append("")
-    md.append(f'<a href="mailto:{EMAIL}">{pic("contact", "Let\'s talk. Based in Costa Rica", width="100%")}</a>')
+    contact_card = pic("contact", "Let's build something. Based in Costa Rica", width="100%")
+    md.append(f'<a href="mailto:{EMAIL}">{contact_card}</a>')
     md.append("")
     md.append('<p align="center">')
     for name, _, lab, val, url in CHANNELS:
         md.append(f'  <a href="{url}">{pic("contact-" + name, f"{lab.title()}: {val}", width=400)}</a>')
     md.append("</p>")
     md.append("")
-    md.append('<p align="center"><sub>Thanks for stopping by.</sub></p>')
+    md.append(f'<p align="center"><sub>Thanks for stopping by. The rest is at <a href="{SITE}">keylorpineda.dev</a>.</sub></p>')
     md.append("")
-    (ROOT / "README.md").write_text("\n".join(md))
+    (ROOT / "README.md").write_text("\n".join(md), encoding="utf-8", newline="\n")
 
 
 def main():
@@ -517,6 +648,9 @@ def main():
     readme()  # collects which chips are used
     for theme in THEME_NAMES:
         header(theme)
+        site(theme)
+        for i in range(len(SECTIONS)):
+            section(i, theme)
         about(theme)
         for p in PROJECTS:
             banner(p, theme)
@@ -531,7 +665,7 @@ def main():
         button("demo", theme, "Live demo", g_arrow, primary=True)
         button("source", theme, "Source code", g_github)
         for s in USED_CHIPS:
-            (ASSETS / "chips" / f"{s}-{theme}.svg").write_text(chip_svg(s, theme, LABELS.get(s)))
+            (ASSETS / "chips" / f"{s}-{theme}.svg").write_text(chip_svg(s, theme, LABELS.get(s)), encoding="utf-8", newline="\n")
     print("assets:", sum(1 for _ in ASSETS.rglob("*.svg")))
 
 

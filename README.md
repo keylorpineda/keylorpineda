@@ -1,12 +1,14 @@
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg"><img src="assets/header-light.svg" alt="Keylor Pineda, software developer from Costa Rica" width="100%"></picture>
+<a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg"><img src="assets/header-light.svg" alt="Keylor Pineda, software developer from Costa Rica. Portfolio: keylorpineda.dev" width="100%"></picture></a>
+
+<a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/site-dark.svg"><img src="assets/site-light.svg" alt="The full portfolio: keylorpineda.dev" width="100%"></picture></a>
 
 <p align="center">
+  <a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-site-dark.svg"><img src="assets/btn-site-light.svg" alt="Portfolio: keylorpineda.dev" height="46"></picture></a>
   <a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-email-dark.svg"><img src="assets/btn-email-light.svg" alt="Email keylorpineda729@gmail.com" height="46"></picture></a>
   <a href="https://www.linkedin.com/in/keylor-pineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" alt="LinkedIn" height="46"></picture></a>
-  <a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-site-dark.svg"><img src="assets/btn-site-light.svg" alt="Portfolio: keylorpineda.dev" height="46"></picture></a>
 </p>
 
-## About me
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-1-dark.svg"><img src="assets/section-1-light.svg" alt="About me" width="100%"></picture>
 
 I'm Keylor, a software developer from Costa Rica. I like building complete products: the database, the API, the interface, and the tests and CI that keep everything working.
 
@@ -14,9 +16,11 @@ Right now most of my time goes into **HealthyCropping**, an Android app that rec
 
 Outside of the code I'm studying cloud and security, which is where the certifications below come from.
 
+Everything here, with live captures of each project, is at **[keylorpineda.dev](https://keylorpineda.dev)**.
+
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/about-dark.svg"><img src="assets/about-light.svg" alt="At a glance" width="100%"></picture>
 
-## Selected work
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-2-dark.svg"><img src="assets/section-2-light.svg" alt="Selected work" width="100%"></picture>
 
 <a href="https://github.com/keylorpineda/healthycropping"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/project-healthycropping-dark.svg"><img src="assets/project-healthycropping-light.svg" alt="HealthyCropping: Crop disease detection that works in the field, with no signal." width="100%"></picture></a>
 
@@ -94,7 +98,7 @@ Upload PDFs and notes, ask in English or Spanish, and get answers that cite the 
 
 <br>
 
-## Certifications
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-3-dark.svg"><img src="assets/section-3-light.svg" alt="Certifications" width="100%"></picture>
 
 <a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-oci-architect-dark.svg"><img src="assets/cert-oci-architect-light.svg" alt="Oracle Cloud Infrastructure Certified Architect Associate" width="100%"></picture></a>
 
@@ -104,29 +108,29 @@ Upload PDFs and notes, ask in English or Spanish, and get answers that cite the 
 
 <a href="https://www.linkedin.com/in/keylor-pineda/details/certifications/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cert-aws-dark.svg"><img src="assets/cert-aws-light.svg" alt="Advanced Generative AI Implementation on AWS" width="100%"></picture></a>
 
-## Activity
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-4-dark.svg"><img src="assets/section-4-light.svg" alt="Activity" width="100%"></picture>
 
 Pulled from the GitHub API and refreshed every day.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202611111414"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202611111414" alt="Contribution totals and streaks" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202611120651"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202611120651" alt="Contribution totals and streaks" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202611111414"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202611111414" alt="Contribution calendar for the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202611120651"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202611120651" alt="Contribution calendar for the last year" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202611111414"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202611111414" alt="Contributions per month over the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202611120651"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202611120651" alt="Contributions per month over the last year" width="100%"></picture>
 
 <details>
 <summary><b>More activity: breakdown, most active repositories and languages</b></summary>
 <br>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202611111414"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202611111414" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202611120651"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202611120651" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202611111414"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202611111414" alt="My most active repositories in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202611120651"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202611120651" alt="My most active repositories in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202611111414"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202611111414" alt="Top languages across public repositories" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202611120651"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202611120651" alt="Top languages across public repositories" width="100%"></picture>
 
 </details>
 
-## Toolbox
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-5-dark.svg"><img src="assets/section-5-light.svg" alt="Toolbox" width="100%"></picture>
 
 <details>
 <summary><b>Languages, frameworks, data, cloud and tooling I work with</b></summary>
@@ -209,7 +213,7 @@ Pulled from the GitHub API and refreshed every day.
 
 </details>
 
-## Where I'm heading
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-6-dark.svg"><img src="assets/section-6-light.svg" alt="Where I'm heading" width="100%"></picture>
 
 <details>
 <summary><b>AWS, Databricks and cybersecurity</b></summary>
@@ -223,9 +227,9 @@ Pulled from the GitHub API and refreshed every day.
 
 </details>
 
-## Contact
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-7-dark.svg"><img src="assets/section-7-light.svg" alt="Contact" width="100%"></picture>
 
-<a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-dark.svg"><img src="assets/contact-light.svg" alt="Let's talk. Based in Costa Rica" width="100%"></picture></a>
+<a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-dark.svg"><img src="assets/contact-light.svg" alt="Let's build something. Based in Costa Rica" width="100%"></picture></a>
 
 <p align="center">
   <a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-portfolio-dark.svg"><img src="assets/contact-portfolio-light.svg" alt="Portfolio: keylorpineda.dev" width="400"></picture></a>
@@ -234,4 +238,4 @@ Pulled from the GitHub API and refreshed every day.
   <a href="https://github.com/keylorpineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/contact-github-dark.svg"><img src="assets/contact-github-light.svg" alt="Github: @keylorpineda" width="400"></picture></a>
 </p>
 
-<p align="center"><sub>Thanks for stopping by.</sub></p>
+<p align="center"><sub>Thanks for stopping by. The rest is at <a href="https://keylorpineda.dev">keylorpineda.dev</a>.</sub></p>

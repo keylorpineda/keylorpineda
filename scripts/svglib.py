@@ -1,4 +1,4 @@
-"""Small toolkit to draw README SVGs with text converted to Inter outlines."""
+"""Small toolkit to draw README SVGs with text converted to outlines (Inter, and Bricolage Grotesque for display)."""
 
 import json
 import random
@@ -13,14 +13,19 @@ from fontTools.ttLib import TTFont
 FONT_DIR = Path(__file__).parent / "fonts"
 ICONS = json.loads((Path(__file__).parent / "icons.json").read_text())
 
+# Same paper, ink and amber as keylorpineda.dev. `accent` is safe for small text on the card,
+# `accent_big` is a brighter one for display-size text, and `fill` is the brand amber for
+# filled shapes, with `on_fill` as the ink that sits on it.
 THEMES = {
     "dark": dict(
-        card="#0F141B", card2="#161C25", border="#262D38", text="#E8ECF1",
-        muted="#9BA3AE", faint="#5C6570", cell="#1A212B", accent="#E3A857",
+        card="#0E0E10", card2="#18181B", border="#2A2A2E", text="#F4F3EE",
+        muted="#A5A5A0", faint="#6B6B68", cell="#1D1D20", accent="#FFC93C",
+        fill="#FFC93C", on_fill="#1A1505", accent_big="#FFC93C",
     ),
     "light": dict(
-        card="#FFFFFF", card2="#F5F7F9", border="#DCE1E6", text="#1A1F26",
-        muted="#57606A", faint="#8C959F", cell="#EDF0F3", accent="#A86B12",
+        card="#F7F6F1", card2="#ECEBE5", border="#DAD8D0", text="#121212",
+        muted="#55554F", faint="#8A8A84", cell="#E4E3DC", accent="#946600",
+        fill="#FFC93C", on_fill="#1A1505", accent_big="#CF8E00",
     ),
 }
 
@@ -73,7 +78,7 @@ F = {
     "regular": Font("Inter-Regular.otf"),
     "medium": Font("Inter-Medium.otf"),
     "semibold": Font("Inter-SemiBold.otf"),
-    "display": Font("InterDisplay-Bold.otf"),
+    "display": Font("BricolageGrotesque-Bold.ttf"),
 }
 
 
