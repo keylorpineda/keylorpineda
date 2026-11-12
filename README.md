@@ -1,9 +1,6 @@
-<a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg"><img src="assets/header-light.svg" alt="Keylor Pineda, software developer from Costa Rica. Portfolio: keylorpineda.dev" width="100%"></picture></a>
-
-<a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/site-dark.svg"><img src="assets/site-light.svg" alt="The full portfolio: keylorpineda.dev" width="100%"></picture></a>
+<a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg"><img src="assets/header-light.svg" alt="Keylor Pineda, software developer from Costa Rica. The full portfolio is at keylorpineda.dev" width="100%"></picture></a>
 
 <p align="center">
-  <a href="https://keylorpineda.dev"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-site-dark.svg"><img src="assets/btn-site-light.svg" alt="Portfolio: keylorpineda.dev" height="46"></picture></a>
   <a href="mailto:keylorpineda729@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-email-dark.svg"><img src="assets/btn-email-light.svg" alt="Email keylorpineda729@gmail.com" height="46"></picture></a>
   <a href="https://www.linkedin.com/in/keylor-pineda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/btn-linkedin-dark.svg"><img src="assets/btn-linkedin-light.svg" alt="LinkedIn" height="46"></picture></a>
 </p>
@@ -112,21 +109,21 @@ Upload PDFs and notes, ask in English or Spanish, and get answers that cite the 
 
 Pulled from the GitHub API and refreshed every day.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202611120652"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202611120652" alt="Contribution totals and streaks" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-dark.svg?v=202611120656"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-stats-light.svg?v=202611120656" alt="Contribution totals and streaks" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202611120652"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202611120652" alt="Contribution calendar for the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-dark.svg?v=202611120656"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-calendar-light.svg?v=202611120656" alt="Contribution calendar for the last year" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202611120652"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202611120652" alt="Contributions per month over the last year" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-dark.svg?v=202611120656"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-months-light.svg?v=202611120656" alt="Contributions per month over the last year" width="100%"></picture>
 
 <details>
 <summary><b>More activity: breakdown, most active repositories and languages</b></summary>
 <br>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202611120652"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202611120652" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-dark.svg?v=202611120656"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-breakdown-light.svg?v=202611120656" alt="Commits, pull requests, reviews and issues in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202611120652"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202611120652" alt="My most active repositories in the last 12 months" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-dark.svg?v=202611120656"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-repos-light.svg?v=202611120656" alt="My most active repositories in the last 12 months" width="100%"></picture>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202611120652"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202611120652" alt="Top languages across public repositories" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-dark.svg?v=202611120656"><img src="https://raw.githubusercontent.com/keylorpineda/keylorpineda/output/activity-languages-light.svg?v=202611120656" alt="Top languages across public repositories" width="100%"></picture>
 
 </details>
 

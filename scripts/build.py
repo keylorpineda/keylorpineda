@@ -111,44 +111,78 @@ def mini_window(th, tint, kind):
 
 
 def header(theme):
+    """One card for everything at the top: the name and role, three project windows,
+    the key facts, and the site as the amber base of the card."""
     th = THEMES[theme]
-    W, H = 1000, 500
-    b = [f'<clipPath id="card"><rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="26"/></clipPath>', frame(W, H, th, 26)]
-    b.append(f'<g clip-path="url(#card)">{sun(th, 745, 610, 340)}</g>')
+    W, H, BAND = 1000, 660, 168
+    ink = th["on_fill"]
+    R = rng(7)
+    b = [f'<clipPath id="card"><rect x=".5" y=".5" width="{W - 1}" height="{H - 1}" rx="28"/></clipPath>', frame(W, H, th, 28)]
+
+    # Texture: a field of dots that thins out toward the name, with a few of them glinting.
+    b.append(
+        f'<pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="{th["border"]}"/></pattern>'
+        '<linearGradient id="fade" x1="0" x2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+        f'<mask id="thin"><rect width="{W}" height="{H}" fill="url(#fade)"/></mask>'
+    )
+    glints = "".join(
+        f'<circle class="glint" style="animation-delay:{R.uniform(0, 7):.1f}s;animation-duration:{R.uniform(4, 8):.1f}s" '
+        f'cx="{3 + 24 * R.randrange(18, 41)}" cy="{3 + 24 * R.randrange(1, 19)}" r="2.2" fill="{th["fill"]}"/>'
+        for _ in range(16)
+    )
+    b.append(f'<g clip-path="url(#card)"><rect width="{W}" height="{H - BAND}" fill="url(#dots)" mask="url(#thin)"/>{glints}{sun(th, 742, 560, 330)}</g>')
 
     # The name, one letter at a time, then the role right under it.
     size = 118
     assert 52 + tw("Pineda.", size, "display", -3) < 520, "the name must stay clear of the windows"
-    l1, t = letters("Keylor", size, 52, 168, th["text"], "l", 0.15, tracking=-3)
-    l2, t = letters("Pineda.", size, 52, 276, th["accent_big"], "l", t + 0.05, tracking=-3)
+    l1, t = letters("Keylor", size, 52, 160, th["text"], "l", 0.15, tracking=-3)
+    l2, t = letters("Pineda.", size, 52, 268, th["accent_big"], "l", t + 0.05, tracking=-3)
     b += [l1, l2]
-    b.append(text("Software developer", 35, 55, 338, th["text"], "display", tracking=-0.8, extra=f'class="up" style="animation-delay:{t + 0.1:.2f}s"'))
+    b.append(text("Software developer", 35, 55, 328, th["text"], "display", tracking=-0.8, extra=f'class="up" style="animation-delay:{t + 0.1:.2f}s"'))
     rx = 55 + tw("Software developer", 35, "display", -0.8) + 18
-    b.append(text("COSTA RICA", 13, rx, 336, th["faint"], "semibold", tracking=2.4, extra=f'class="up" style="animation-delay:{t + 0.2:.2f}s"'))
-
-    # The site, as the one filled thing in the card.
-    label = "keylorpineda.dev"
-    pw = tw(label, 19, "semibold") + 86
-    pill = (
-        f'<rect x="55" y="388" width="{fmt(pw)}" height="54" rx="14" fill="{th["fill"]}"/>'
-        + text(label, 19, 77, 421.5, th["on_fill"], "semibold")
-        + f'<g class="nudge" transform="translate({fmt(55 + pw - 42)} 404)" fill="none" stroke="{th["on_fill"]}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17L17 5M8 5h9v9"/></g>'
-    )
-    b.append(f'<g class="up" style="animation-delay:{t + 0.35:.2f}s">{pill}</g>')
-    b.append(text("Now building HealthyCropping", 15.5, 55 + pw + 22, 420.5, th["muted"], "medium", extra=f'class="up" style="animation-delay:{t + 0.45:.2f}s"'))
+    b.append(text("COSTA RICA", 13, rx, 326, th["faint"], "semibold", tracking=2.4, extra=f'class="up" style="animation-delay:{t + 0.2:.2f}s"'))
 
     # Three projects as windows: they open like a hand of cards, then keep floating.
-    cx, cy = 742, 232
+    cx, cy = 742, 196
     fan = [
-        ("leaf", "#17B877", -118, 18, -10, "fl", 0.9),
-        ("answer", "#1FA37F", 118, 18, 10, "fr", 1.0),
+        ("leaf", "#17B877", -122, 20, -10, "fl", 0.9),
+        ("answer", "#1FA37F", 122, 20, 10, "fr", 1.0),
         ("store", "#5B54F0", 0, -6, 0, "fc", 0.8),
     ]
     for kind, tint, dx, dy, rot, cls, delay in fan:
         b.append(
-            f'<g transform="translate({cx + dx} {cy + dy}) rotate({rot})"><g class="float" style="animation-delay:{-delay * 3:.1f}s">'
+            f'<g transform="translate({cx + dx} {cy + dy}) rotate({rot}) scale(1.12)"><g class="float" style="animation-delay:{-delay * 3:.1f}s">'
             f'<g class="{cls}" style="animation-delay:{delay:.2f}s">{mini_window(th, tint, kind)}</g></g></g>'
         )
+
+    # The facts, as four tiles across the card.
+    tiles = [("3", "products shipped"), ("4", "cloud and AI certifications"), ("UTC−6", "Costa Rica"), ("Now", "building HealthyCropping")]
+    tx, ty, gap = 52, 372, 12
+    tile_w = (W - 2 * tx - gap * (len(tiles) - 1)) / len(tiles)
+    for i, (big, small) in enumerate(tiles):
+        x = tx + i * (tile_w + gap)
+        tile = (
+            f'<rect x="{fmt(x)}" y="{ty}" width="{fmt(tile_w)}" height="92" rx="16" fill="{th["card2"]}" stroke="{th["border"]}"/>'
+            + text(big, 34, x + 18, ty + 46, th["text"], "display", tracking=-0.8)
+            + text(small, 13.5, x + 18, ty + 72, th["muted"], "medium")
+        )
+        b.append(f'<g class="up" style="animation-delay:{t + 0.3 + i * 0.08:.2f}s">{tile}</g>')
+
+    # The site is the base of the card: a solid amber band with a light that keeps crossing it.
+    by = H - BAND
+    band = [
+        f'<linearGradient id="amber" x1="0" x2="1"><stop offset="0" stop-color="{th["fill"]}"/><stop offset="1" stop-color="#FFB627"/></linearGradient>'
+        f'<rect x="0" y="{by}" width="{W}" height="{BAND}" fill="url(#amber)"/>'
+        f'<rect class="sweep" x="-260" y="{by - 30}" width="170" height="{BAND + 60}" fill="#FFFFFF" opacity=".36" transform="skewX(-18)"/>'
+    ]
+    b.append(f'<g clip-path="url(#card)">{"".join(band)}</g>')
+    b.append(text("THE FULL PORTFOLIO", 13.5, 55, by + 48, ink, "semibold", tracking=2.6))
+    b.append(text("keylorpineda.dev", 64, 51, by + 112, ink, "display", tracking=-1.8))
+    b.append(text("Scroll-driven scenes, live captures of every project, English and Spanish, light and dark.", 16.5, 55, by + 143, ink, "medium"))
+    b.append(
+        f'<g class="go"><circle cx="{W - 100}" cy="{by + BAND / 2}" r="42" fill="{ink}"/>'
+        f'<g transform="translate({W - 113} {by + BAND / 2 - 13})" fill="none" stroke="{th["fill"]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21L21 5M9 5h12v12"/></g></g>'
+    )
 
     style = (
         f".l,.up,.fl,.fr,.fc{{transform-box:fill-box;animation-duration:1.1s;animation-timing-function:{EASE};animation-fill-mode:backwards}}"
@@ -159,38 +193,19 @@ def header(theme):
         ".fl,.fr,.fc{transform-origin:center;animation-duration:1.5s}"
         ".fc{animation-name:fc}.fl{animation-name:fl}.fr{animation-name:fr}"
         "@keyframes fc{from{opacity:0;transform:translateY(150px) scale(.7)}}"
-        "@keyframes fl{from{opacity:0;transform:translate(118px,150px) rotate(10deg) scale(.7)}}"
-        "@keyframes fr{from{opacity:0;transform:translate(-118px,150px) rotate(-10deg) scale(.7)}}"
+        "@keyframes fl{from{opacity:0;transform:translate(122px,150px) rotate(10deg) scale(.7)}}"
+        "@keyframes fr{from{opacity:0;transform:translate(-122px,150px) rotate(-10deg) scale(.7)}}"
         ".float{animation:float 7s ease-in-out infinite alternate}"
         "@keyframes float{from{transform:translateY(-5px)}to{transform:translateY(6px)}}"
-        ".nudge{animation:nudge 2.6s ease-in-out infinite}"
-        "@keyframes nudge{0%,100%{translate:0 0}50%{translate:3px -3px}}" + SUN_CSS + REDUCED
-    )
-    write("header", theme, svg_doc(W, H, "".join(b), "Keylor Pineda, software developer from Costa Rica. Portfolio: keylorpineda.dev", style))
-
-
-# --------------------------------------------------------------------------- site card
-def site(theme):
-    """The portfolio gets its own card, in solid amber, right under the header."""
-    th = THEMES[theme]
-    W, H = 1000, 190
-    ink = th["on_fill"]
-    b = [f'<clipPath id="card"><rect width="{W}" height="{H}" rx="26"/></clipPath>']
-    b.append(f'<rect width="{W}" height="{H}" rx="26" fill="{th["fill"]}"/>')
-    # A band of light crosses the card every few seconds.
-    b.append(f'<g clip-path="url(#card)"><rect class="sweep" x="-260" y="-40" width="170" height="{H + 80}" fill="#FFFFFF" opacity=".34" transform="skewX(-18)"/></g>')
-    b.append(text("THE FULL PORTFOLIO", 13.5, 50, 58, ink, "semibold", tracking=2.6))
-    b.append(text("keylorpineda.dev", 62, 47, 124, ink, "display", tracking=-1.8))
-    b.append(text("Scroll-driven scenes, live captures of every project, English and Spanish, light and dark.", 17, 50, 158, ink, "medium"))
-    b.append(f'<g class="go"><circle cx="{W - 96}" cy="{H / 2}" r="40" fill="{ink}"/>'
-             f'<g transform="translate({W - 109} {H / 2 - 13})" fill="none" stroke="{th["fill"]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21L21 5M9 5h12v12"/></g></g>')
-    style = (
+        ".glint{opacity:0;animation:glint 6s ease-in-out infinite}"
+        "@keyframes glint{0%,100%{opacity:0}50%{opacity:.9}}"
         ".sweep{animation:sweep 5.5s cubic-bezier(.4,0,.2,1) infinite}"
         "@keyframes sweep{0%,35%{translate:0 0}75%,100%{translate:1500px 0}}"
         ".go{transform-box:fill-box;transform-origin:center;animation:go 2.8s ease-in-out infinite}"
-        "@keyframes go{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}" + REDUCED
+        "@keyframes go{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}" + SUN_CSS + REDUCED
     )
-    write("site", theme, svg_doc(W, H, "".join(b), "The full portfolio: keylorpineda.dev", style))
+    title = "Keylor Pineda, software developer from Costa Rica. 3 products shipped, 4 cloud and AI certifications. Portfolio: keylorpineda.dev"
+    write("header", theme, svg_doc(W, H, "".join(b), title, style))
 
 
 # --------------------------------------------------------------------------- section titles
@@ -530,12 +545,9 @@ def heading(i):
 
 def readme():
     md = []
-    md.append(f'<a href="{SITE}">{pic("header", "Keylor Pineda, software developer from Costa Rica. Portfolio: keylorpineda.dev", width="100%")}</a>')
-    md.append("")
-    md.append(f'<a href="{SITE}">{pic("site", "The full portfolio: keylorpineda.dev", width="100%")}</a>')
+    md.append(f'<a href="{SITE}">{pic("header", "Keylor Pineda, software developer from Costa Rica. The full portfolio is at keylorpineda.dev", width="100%")}</a>')
     md.append("")
     md.append('<p align="center">')
-    md.append(f'  <a href="{SITE}">{pic("btn-site", "Portfolio: keylorpineda.dev", height=46)}</a>')
     md.append(f'  <a href="mailto:{EMAIL}">{pic("btn-email", f"Email {EMAIL}", height=46)}</a>')
     md.append(f'  <a href="{LINKEDIN}">{pic("btn-linkedin", "LinkedIn", height=46)}</a>')
     md.append("</p>")
@@ -648,7 +660,6 @@ def main():
     readme()  # collects which chips are used
     for theme in THEME_NAMES:
         header(theme)
-        site(theme)
         for i in range(len(SECTIONS)):
             section(i, theme)
         about(theme)
@@ -660,7 +671,6 @@ def main():
             cert(c, theme)
         button("email", theme, EMAIL, g_mail)
         button("linkedin", theme, "LinkedIn", g_linkedin)
-        button("site", theme, "keylorpineda.dev", g_globe, primary=True)
         contact(theme)
         button("demo", theme, "Live demo", g_arrow, primary=True)
         button("source", theme, "Source code", g_github)
