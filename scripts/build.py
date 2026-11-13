@@ -70,44 +70,95 @@ SUN_CSS = (
 
 
 def mini_window(th, tint, kind):
-    """A small app window, 280 x 186, centred on the origin."""
+    """A small app window, 280 x 186, centred on the origin. Each kind plays a 6 s loop
+    of its product in use; the timing classes are styled in WINDOW_CSS."""
     w, h = 280, 186
     x, y = -w / 2, -h / 2
-    b = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" fill="{th["card2"]}" stroke="{th["border"]}"/>']
+    b = [f'<clipPath id="win-{kind}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14"/></clipPath>']
+    b.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" fill="{th["card2"]}" stroke="{th["border"]}"/>')
     b.append(f'<path d="M{x} {y + 28}H{x + w}" stroke="{th["border"]}"/>')
     for i, col in enumerate(("#FF5F57", "#FEBC2E", "#28C840")):
         b.append(f'<circle cx="{x + 18 + i * 14}" cy="{y + 14}" r="4" fill="{col}"/>')
     b.append(f'<rect x="{-46}" y="{y + 8}" width="92" height="12" rx="6" fill="{th["cell"]}"/>')
     top = y + 40
-    if kind == "store":  # Booth: a cover, the shop's name and three products
+    cursor = (
+        '<path d="M0 0L0 16L4.5 12L7.5 19L10 18L7 11L13 11Z" '
+        f'fill="{th["text"]}" stroke="{th["card"]}" stroke-width="1.2" stroke-linejoin="round"/>'
+    )
+    if kind == "store":  # Booth: the cursor picks a product, the cart badge pops, the order bar slides in
         b.append(f'<rect x="{x + 14}" y="{top}" width="{w - 28}" height="40" rx="8" fill="{tint}" opacity=".85"/>')
         b.append(f'<rect x="{x + 14}" y="{top + 50}" width="110" height="9" rx="4.5" fill="{th["text"]}"/>')
         b.append(f'<rect x="{x + 14}" y="{top + 66}" width="170" height="6" rx="3" fill="{th["faint"]}"/>')
         for i in range(3):
-            b.append(f'<rect x="{x + 14 + i * 86}" y="{top + 84}" width="80" height="48" rx="8" fill="{th["cell"]}" stroke="{th["border"]}"/>')
-            b.append(f'<circle cx="{x + 82 + i * 86}" cy="{top + 120}" r="6" fill="{tint}"/>')
-    elif kind == "answer":  # Research Engine: a question, an answer with citations and its sources
+            px = x + 14 + i * 86
+            hot = ' class="w-pick"' if i == 1 else ""
+            b.append(f'<rect{hot} x="{px}" y="{top + 84}" width="80" height="48" rx="8" fill="{th["cell"]}" stroke="{th["border"]}"/>')
+            b.append(f'<circle{hot.replace("w-pick", "w-plus")} cx="{px + 68}" cy="{top + 120}" r="6" fill="{tint}"/>')
+        # the order bar that appears at the bottom once something is in the cart
+        b.append(
+            f'<g clip-path="url(#win-{kind})"><g class="w-bar"><rect x="{x + 50}" y="{y + h - 26}" width="180" height="20" rx="10" fill="{tint}"/>'
+            f'<rect x="{x + 66}" y="{y + h - 19}" width="62" height="6" rx="3" fill="#FFFFFF" opacity=".9"/>'
+            f'<rect x="{x + 182}" y="{y + h - 19}" width="34" height="6" rx="3" fill="#FFFFFF" opacity=".9"/></g></g>'
+        )
+        b.append(f'<g class="w-badge"><circle cx="{x + w - 28}" cy="{top + 12}" r="9" fill="{th["card"]}"/>'
+                 f'<circle cx="{x + w - 28}" cy="{top + 12}" r="6" fill="{th["fill"]}"/></g>')
+        b.append(f'<g class="w-cursor" style="--x0:{x + 230}px;--y0:{top + 6}px;--x1:{x + 150}px;--y1:{top + 114}px">{cursor}</g>')
+    elif kind == "answer":  # Research Engine: the answer is written line by line, then the sources light up
         b.append(f'<rect x="{x + 14}" y="{top}" width="{w - 28}" height="30" rx="8" fill="{th["cell"]}" stroke="{th["border"]}"/>')
-        b.append(f'<rect x="{x + 24}" y="{top + 11}" width="120" height="7" rx="3.5" fill="{th["muted"]}"/>')
-        b.append(f'<rect x="{x + w - 62}" y="{top + 6}" width="42" height="18" rx="6" fill="{tint}"/>')
+        b.append(f'<rect class="w-type" x="{x + 24}" y="{top + 11}" width="120" height="7" rx="3.5" fill="{th["muted"]}"/>')
+        b.append(f'<rect class="w-ask" x="{x + w - 62}" y="{top + 6}" width="42" height="18" rx="6" fill="{tint}"/>')
         for i, lw in enumerate((150, 132, 144, 96)):
-            b.append(f'<rect x="{x + 14}" y="{top + 44 + i * 14}" width="{lw}" height="6" rx="3" fill="{th["faint"] if i else th["text"]}"/>')
+            b.append(f'<rect class="w-line" style="animation-delay:{0.9 + i * 0.35:.2f}s" x="{x + 14}" y="{top + 44 + i * 14}" width="{lw}" height="6" rx="3" fill="{th["faint"] if i else th["text"]}"/>')
         for i in range(3):
-            b.append(f'<rect x="{x + 180}" y="{top + 42 + i * 30}" width="86" height="24" rx="6" fill="{th["cell"]}" stroke="{th["border"]}"/>')
-            b.append(f'<rect x="{x + 188}" y="{top + 51 + i * 30}" width="{44 - i * 8}" height="5" rx="2.5" fill="{tint}"/>')
+            b.append(f'<g class="w-src" style="animation-delay:{2.6 + i * 0.25:.2f}s">'
+                     f'<rect x="{x + 180}" y="{top + 42 + i * 30}" width="86" height="24" rx="6" fill="{th["cell"]}" stroke="{th["border"]}"/>'
+                     f'<rect x="{x + 188}" y="{top + 51 + i * 30}" width="{44 - i * 8}" height="5" rx="2.5" fill="{tint}"/></g>')
         b.append(f'<rect x="{x + 14}" y="{top + 108}" width="150" height="5" rx="2.5" fill="{th["cell"]}"/>')
-        b.append(f'<rect x="{x + 14}" y="{top + 108}" width="92" height="5" rx="2.5" fill="{tint}"/>')
-    else:  # HealthyCropping: a leaf under the scanner and the result
+        b.append(f'<rect class="w-meter" x="{x + 14}" y="{top + 108}" width="92" height="5" rx="2.5" fill="{tint}"/>')
+    else:  # HealthyCropping: a scan line sweeps the leaf, the spots light up, the result fills
         b.append(f'<rect x="{x + 14}" y="{top}" width="112" height="{h - 54}" rx="10" fill="{th["cell"]}" stroke="{th["border"]}"/>')
         b.append(f'<path transform="translate({x + 70} {top + 66}) rotate(-18) scale(.52)" d="M0 -88C52 -60 62 10 0 86C-62 10 -52 -60 0 -88Z" fill="{tint}"/>')
-        b.append(f'<circle cx="{x + 78}" cy="{top + 58}" r="5" fill="#E0962E"/><circle cx="{x + 62}" cy="{top + 80}" r="3.5" fill="#E0962E"/>')
+        b.append(f'<circle class="w-spot" cx="{x + 78}" cy="{top + 58}" r="5" fill="#E0962E"/>'
+                 f'<circle class="w-spot" style="animation-delay:2.1s" cx="{x + 62}" cy="{top + 80}" r="3.5" fill="#E0962E"/>')
+        b.append(f'<rect class="w-scan" x="{x + 20}" y="{top + 4}" width="100" height="2.5" rx="1.25" fill="{th["fill"]}"/>')
         b.append(f'<rect x="{x + 140}" y="{top + 4}" width="96" height="9" rx="4.5" fill="{th["text"]}"/>')
         for i, lw in enumerate((120, 104, 112)):
-            b.append(f'<rect x="{x + 140}" y="{top + 26 + i * 14}" width="{lw}" height="6" rx="3" fill="{th["faint"]}"/>')
+            b.append(f'<rect class="w-line" style="animation-delay:{2.4 + i * 0.25:.2f}s" x="{x + 140}" y="{top + 26 + i * 14}" width="{lw}" height="6" rx="3" fill="{th["faint"]}"/>')
         b.append(f'<rect x="{x + 140}" y="{top + 80}" width="126" height="34" rx="9" fill="{th["card"]}" stroke="{th["border"]}"/>')
         b.append(f'<rect x="{x + 150}" y="{top + 94}" width="106" height="6" rx="3" fill="{th["cell"]}"/>')
-        b.append(f'<rect x="{x + 150}" y="{top + 94}" width="66" height="6" rx="3" fill="{tint}"/>')
+        b.append(f'<rect class="w-meter" x="{x + 150}" y="{top + 94}" width="66" height="6" rx="3" fill="{tint}"/>')
     return "".join(b)
+
+
+# Every loop is 6 s; the keyframes hold their end state, then reset quietly before repeating.
+WINDOW_CSS = (
+    ".w-cursor{animation:w-cur 6s cubic-bezier(.45,0,.2,1) infinite}"
+    "@keyframes w-cur{0%,8%{translate:var(--x0) var(--y0)}38%,46%{translate:var(--x1) var(--y1)}"
+    "48%{translate:var(--x1) calc(var(--y1) + 2px)}52%,80%{translate:var(--x1) var(--y1)}100%{translate:var(--x0) var(--y0)}}"
+    ".w-pick{animation:w-pick 6s ease-out infinite}"
+    f"@keyframes w-pick{{0%,44%,90%,100%{{stroke-width:1}}48%,80%{{stroke-width:2.5}}}}"
+    ".w-plus{transform-box:fill-box;transform-origin:center;animation:w-plus 6s ease-out infinite}"
+    "@keyframes w-plus{0%,45%,100%{transform:scale(1)}48%{transform:scale(1.5)}54%{transform:scale(1)}}"
+    ".w-badge{transform-box:fill-box;transform-origin:center;animation:w-badge 6s cubic-bezier(.3,1.6,.5,1) infinite}"
+    "@keyframes w-badge{0%,48%{transform:scale(0)}56%,88%{transform:scale(1)}94%,100%{transform:scale(0)}}"
+    ".w-bar{animation:w-bar 6s cubic-bezier(.22,1,.36,1) infinite}"
+    "@keyframes w-bar{0%,50%{translate:0 34px}60%,88%{translate:0 0}96%,100%{translate:0 34px}}"
+    ".w-type,.w-line,.w-meter{transform-box:fill-box;transform-origin:0 50%}"
+    ".w-type{animation:w-type 6s steps(14) infinite}"
+    "@keyframes w-type{0%{transform:scaleX(0)}14%,92%{transform:scaleX(1)}100%{transform:scaleX(0)}}"
+    ".w-ask{animation:w-ask 6s ease-out infinite}"
+    "@keyframes w-ask{0%,14%,22%,100%{opacity:1}17%{opacity:.45}}"
+    ".w-line{animation:w-line 6s cubic-bezier(.22,1,.36,1) infinite backwards}"
+    "@keyframes w-line{0%{transform:scaleX(0)}12%,70%{transform:scaleX(1)}80%,100%{transform:scaleX(0)}}"
+    ".w-src{animation:w-src 6s ease-out infinite backwards}"
+    "@keyframes w-src{0%{opacity:.25}8%,60%{opacity:1}72%,100%{opacity:.25}}"
+    ".w-meter{animation:w-meter 6s cubic-bezier(.22,1,.36,1) infinite}"
+    "@keyframes w-meter{0%,45%{transform:scaleX(0)}65%,90%{transform:scaleX(1)}100%{transform:scaleX(0)}}"
+    ".w-scan{animation:w-scan 3s ease-in-out infinite alternate}"
+    "@keyframes w-scan{from{translate:0 0}to{translate:0 120px}}"
+    ".w-spot{transform-box:fill-box;transform-origin:center;animation:w-spot 3s ease-in-out infinite}"
+    "@keyframes w-spot{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.6);opacity:1}}"
+)
 
 
 def header(theme):
@@ -202,7 +253,7 @@ def header(theme):
         ".sweep{animation:sweep 5.5s cubic-bezier(.4,0,.2,1) infinite}"
         "@keyframes sweep{0%,35%{translate:0 0}75%,100%{translate:1500px 0}}"
         ".go{transform-box:fill-box;transform-origin:center;animation:go 2.8s ease-in-out infinite}"
-        "@keyframes go{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}" + SUN_CSS + REDUCED
+        "@keyframes go{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}" + WINDOW_CSS + SUN_CSS + REDUCED
     )
     title = "Keylor Pineda, software developer from Costa Rica. 3 products shipped, 4 cloud and AI certifications. Portfolio: keylorpineda.dev"
     write("header", theme, svg_doc(W, H, "".join(b), title, style))
